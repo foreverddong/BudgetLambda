@@ -17,7 +17,7 @@ namespace BudgetLambda.CoreLib.Scheduler
             this.configuration = conf;
         }
 
-        public void ConfigureMQ(PipelinePackage package)
+        public async Task ConfigureMQ(PipelinePackage package)
         {
             var exchangename = $"{package.Tenant.Prefix}-{package.ExchangeName}";
             var factory = new ConnectionFactory
@@ -27,10 +27,14 @@ namespace BudgetLambda.CoreLib.Scheduler
                 Password = configuration.GetValue<string>("RabbitMQ:Password"),
                 VirtualHost = configuration.GetValue<string>("RabbitMQ:VirtualHost"),
             };
-            using var connection = factory.CreateConnection();
-            using var channel = connection.CreateModel();
 
-            channel.ExchangeDeclare(exchangename, ExchangeType.Topic, durable: true);
+            await Task.Run(() => 
+            {
+                using var connection = factory.CreateConnection();
+                using var channel = connection.CreateModel();
+
+                channel.ExchangeDeclare(exchangename, ExchangeType.Topic, durable: true);
+            });
         }
     }
 }
