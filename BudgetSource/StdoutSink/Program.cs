@@ -38,7 +38,6 @@ void ConfigureSinkStdOut()
     {
         var body = Encoding.UTF8.GetString(ea.Body.ToArray());
         logger.LogInformation($"{body}");
-        channel.BasicAck(ea.DeliveryTag, false);
     };
     channel.BasicConsume(queueName, true, consumer);
 }
