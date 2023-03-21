@@ -1,6 +1,6 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM ghcr.io/openfaas/of-watchdog:0.8.0 as watchdog
+FROM ghcr.io/openfaas/of-watchdog:0.9.11 as watchdog
 
 FROM mcr.microsoft.com/dotnet/runtime:7.0 AS base
 WORKDIR /app
