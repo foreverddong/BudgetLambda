@@ -23,7 +23,9 @@ COPY --from=publish /app/publish .
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
+RUN echo $PATH
 ENV mode="http"
 ENV upstream_url="http://127.0.0.1:80"
 ENV fprocess="dotnet BakedStdoutSink.dll"
+EXPOSE 8080
 CMD ["fwatchdog"]
