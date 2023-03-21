@@ -20,6 +20,9 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
+RUN chmod +x /usr/bin/fwatchdog
+
 ENV mode="http"
 ENV upstream_url="http://127.0.0.1:80"
 ENV fprocess="dotnet BakedStdoutSink.dll"
