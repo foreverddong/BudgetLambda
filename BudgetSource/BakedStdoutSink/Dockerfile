@@ -24,4 +24,4 @@ ENTRYPOINT ["dotnet", "BakedStdoutSink.dll"]
 ENV mode="http"
 ENV upstream_url="http://127.0.0.1:80"
 ENV fprocess="dotnet BakedStdoutSink.dll"
-CMD ["fwatchdog"]
+ENTRYPOINT ["fwatchdog"]
