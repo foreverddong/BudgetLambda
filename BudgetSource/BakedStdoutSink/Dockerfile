@@ -19,7 +19,6 @@ RUN dotnet publish "BakedStdoutSink.csproj" -c Release -o /app/publish /p:UseApp
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BakedStdoutSink.dll"]
 
 ENV mode="http"
 ENV upstream_url="http://127.0.0.1:80"
