@@ -32,7 +32,7 @@ namespace BudgetLambda.CoreLib.Component
 
         public string GenerateManifest()
         {
-            
+            throw new NotImplementedException();
         }
     }
 }

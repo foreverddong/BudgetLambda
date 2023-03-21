@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "BudgetLambda.CLI": {
+      "commandName": "Project"
+    },
+    "Bridge to Kubernetes": {
+      "commandName": "AzureDevSpacesLocal"
+    }
+  }
+}

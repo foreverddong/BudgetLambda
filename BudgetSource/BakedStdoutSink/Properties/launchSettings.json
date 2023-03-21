@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "BakedStdoutSink": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "RabbitMQ__Hostname": "felis-rabbit.rabbitmq-system",
+        "RabbitMQ__Username": "guest",
+        "RabbitMQ__Password": "guest",
+        "RabbitMQ__VirtualHost": "budget",
+        "Pipeline__Exchange": "41cc569f-SamplePipeline",
+        "Pipeline__Queue": "41cc569f-SampleSink",
+        "Pipeline__Key": "41cc569f-SampleSource-Output"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
