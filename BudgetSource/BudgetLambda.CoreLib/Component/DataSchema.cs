@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,10 @@ namespace BudgetLambda.CoreLib.Component
 {
     public class DataSchema
     {
+        [Key]
         public Guid SchemaID { get; set; } = Guid.NewGuid();
 
-        public Dictionary<string, string> Mappings { get; set; } = new();
+        public List<PropertyDefinition> Mapping { get; set; } = new();
     }
 
     public enum DataType
@@ -19,5 +21,13 @@ namespace BudgetLambda.CoreLib.Component
         Float,
         Boolean,
         String,
+    }
+
+    public class PropertyDefinition
+    {
+        [Key]
+        public Guid DefinitionID { get; set; }
+        public DataType Type { get; set; }
+        public string Identifier { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BudgetLambda.CoreLib.Business;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace BudgetLambda.CoreLib.Component
 {
     public class PipelinePackage
     {
+        [Key]
         public Guid PackageID { get; set; } = Guid.NewGuid();
         public BudgetTenant Tenant { get; set; }
         public string PackageName { get; set; }
