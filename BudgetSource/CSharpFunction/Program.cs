@@ -13,6 +13,7 @@ var app = builder.Build();
 
 var configuration = app.Configuration;
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
+logger.LogInformation(configuration.GetValue<string>("RabbitMQ:Hostname"));
 var factory = new ConnectionFactory
 {
     HostName = configuration.GetValue<string>("RabbitMQ:Hostname"),
