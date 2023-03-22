@@ -1,4 +1,4 @@
-FROM registry.donglinxu.com/budget/csharplambdamap:latest as build
+FROM ghcr.io/openfaas/of-watchdog:0.9.11 as watchdog
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 
