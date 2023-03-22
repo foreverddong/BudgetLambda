@@ -29,7 +29,7 @@ void ConfigureSinkStdOut()
 
     var queueName = configuration.GetValue<string>("Pipeline:Queue");
     var exchangeName = configuration.GetValue<string>("Pipeline:Exchange");
-    var routingKey = configuration.GetValue<string>("Pipeline:Key");
+    var routingKey = configuration.GetValue<string>("Pipeline:InputKey");
     channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
     channel.QueueBind(queueName, exchangeName, routingKey);
 

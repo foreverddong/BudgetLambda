@@ -15,6 +15,8 @@ namespace BudgetLambda.CoreLib.Component
         public string ComponentName { get; set; }
         public DataSchema InputSchema { get; set; }
         public DataSchema OutputSchema { get; set; }
+        public string InputKey { get; set; }
+        public string OutputKey { get; set; }
         public List<ComponentBase> Next { get; set; }
 
         public abstract Task<bool> CreateWorkingPackage(string workdir);
