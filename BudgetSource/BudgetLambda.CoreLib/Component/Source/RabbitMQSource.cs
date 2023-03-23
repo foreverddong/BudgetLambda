@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BudgetLambda.CoreLib.Utility.Faas;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,17 +12,17 @@ namespace BudgetLambda.CoreLib.Component.Source
     {
         public string ExchangeName { get; set; }
 
-        public override Task<bool> BuildImage()
+        public override Task<bool> BuildImage(MemoryStream tarball, IConfiguration configuration)
         {
             throw new NotImplementedException();
         }
 
-        public override Task<bool> CreateWorkingPackage(string workdir)
+        public override Task<MemoryStream> CreateWorkingPackage(string workdir, string packagedir, IConfiguration configuration)
         {
             throw new NotImplementedException();
         }
 
-        public override string GenerateDeploymentManifest()
+        public override FunctionDefinition GenerateDeploymentManifest(string masterExchange, IConfiguration configuration)
         {
             throw new NotImplementedException();
         }

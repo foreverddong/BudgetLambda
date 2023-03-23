@@ -9,7 +9,6 @@
 	<ItemGroup>
 		<Folder Include="Component\Filter\" />
 		<Folder Include="Component\Reduce\" />
-		<Folder Include="Component\Sink\" />
 		<Folder Include="Utility\Faas\Model\" />
 	</ItemGroup>
 

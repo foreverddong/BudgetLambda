@@ -1,10 +1,13 @@
 ﻿using BudgetLambda.CoreLib.Business;
+using BudgetLambda.CoreLib.Utility.Extensions;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BudgetLambda.CoreLib.Utility.Faas;
 
 namespace BudgetLambda.CoreLib.Component
 {
@@ -19,9 +22,11 @@ namespace BudgetLambda.CoreLib.Component
         public string OutputKey { get; set; }
         public List<ComponentBase> Next { get; set; }
 
-        public abstract Task<bool> CreateWorkingPackage(string workdir);
-        public abstract Task<bool> BuildImage();
-        public abstract string GenerateDeploymentManifest();
+        public virtual string ImageTag => $"registry.donglinxu.com/budgetuser/{this.ComponentID.ShortID()}-{this.ComponentName}:latest";
+
+        public abstract Task<MemoryStream> CreateWorkingPackage(string workdir, string packagedir, IConfiguration configuration);
+        public abstract Task<bool> BuildImage(MemoryStream tarball, IConfiguration configuration);
+        public abstract FunctionDefinition GenerateDeploymentManifest( string masterExchange, IConfiguration configuration);
 
 
     }

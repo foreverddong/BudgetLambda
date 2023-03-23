@@ -36,5 +36,15 @@ namespace BudgetLambda.CoreLib.Scheduler
                 channel.ExchangeDeclare(exchangename, ExchangeType.Topic, durable: true);
             });
         }
+
+        public async Task SchedulePackage()
+        {
+        
+        }
+
+        public async Task ScheduleComponent(ComponentBase component)
+        {
+            
+        }
     }
 }
