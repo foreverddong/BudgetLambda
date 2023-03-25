@@ -1,4 +1,5 @@
 ﻿using BudgetLambda.CoreLib.Component;
+using BudgetLambda.CoreLib.Utility.Faas;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using System;
@@ -12,20 +13,30 @@ namespace BudgetLambda.CoreLib.Scheduler
     public class BudgetWorkloadScheduler
     {
         private readonly IConfiguration configuration;
-        public BudgetWorkloadScheduler(IConfiguration conf)
+        private readonly FaasClient client;
+        private PipelinePackage package;
+        private string exchangeName => $"ex-{package.Tenant.Prefix}-{package.ExchangeName}";
+
+
+        public BudgetWorkloadScheduler(IConfiguration conf, FaasClient _client)
         {
             this.configuration = conf;
+            this.client = _client;
         }
 
-        public async Task ConfigureMQ(PipelinePackage package)
+        public void LoadPackage(PipelinePackage package)
         {
-            var exchangename = $"{package.Tenant.Prefix}-{package.ExchangeName}";
+            this.package = package;
+        }
+
+        public async Task ConfigureMQ()
+        {
             var factory = new ConnectionFactory
             {
-                HostName = configuration.GetValue<string>("RabbitMQ:Hostname"),
-                UserName = configuration.GetValue<string>("RabbitMQ:Username"),
-                Password = configuration.GetValue<string>("RabbitMQ:Password"),
-                VirtualHost = configuration.GetValue<string>("RabbitMQ:VirtualHost"),
+                HostName = configuration.GetValue<string>("Infrastructure:RabbitMQ:Hostname"),
+                UserName = configuration.GetValue<string>("Infrastructure:RabbitMQ:Username"),
+                Password = configuration.GetValue<string>("Infrastructure:RabbitMQ:Password"),
+                VirtualHost = configuration.GetValue<string>("Infrastructure:RabbitMQ:VirtualHost"),
             };
 
             await Task.Run(() => 
@@ -33,18 +44,27 @@ namespace BudgetLambda.CoreLib.Scheduler
                 using var connection = factory.CreateConnection();
                 using var channel = connection.CreateModel();
 
-                channel.ExchangeDeclare(exchangename, ExchangeType.Topic, durable: true);
+                channel.ExchangeDeclare(this.exchangeName, ExchangeType.Topic, durable: true);
             });
         }
 
-        public async Task SchedulePackage()
+        public async Task SchedulePackage(string workdir)
         {
         
         }
 
-        public async Task ScheduleComponent(ComponentBase component)
+        public async Task ScheduleComponent(string workdir, ComponentBase component)
         {
-            
+            if (!Path.Exists(workdir))
+            {
+                Directory.CreateDirectory(workdir);
+            }
+            var package = await component.CreateWorkingPackage(workdir, configuration);
+            await component.BuildImage(package, configuration);
+            var manifest = component.GenerateDeploymentManifest(this.exchangeName, configuration);
+            await client.FunctionsPOSTAsync(manifest);
+            Directory.Delete(workdir, true);
+
         }
     }
 }

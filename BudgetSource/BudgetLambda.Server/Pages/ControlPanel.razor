@@ -1,13 +1,10 @@
-﻿@inject BudgetWorkloadScheduler scheduler
+﻿@using BudgetLambda.CoreLib.Component;
+@using BudgetLambda.CoreLib.Component.Map;
+@inject BudgetWorkloadScheduler scheduler
+
+@page "/controlpanel"
 
 <MudText Typo="Typo.h3">Debug Hatch</MudText>
 
 
 <MudButton Variant="Variant.Filled" OnClick="SampleWorkflow">Do Sample Workflow</MudButton>
-
-@code {
-    public async Task SampleWorkflow()
-    {
-        
-    }
-}

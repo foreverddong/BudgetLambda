@@ -18,7 +18,7 @@ namespace BudgetLambda.CoreLib.Component.Map
 
         public string Code { get; set; }
 
-        public override async Task<MemoryStream> CreateWorkingPackage(string workdir, string packagedir, IConfiguration configuration)
+        public override async Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             //Download the dockerfile
             var dockerfileUri = configuration.GetValue<string>("Components:CSharpLambdaMap:DockerfileUri");
@@ -48,11 +48,14 @@ namespace BudgetLambda.CoreLib.Component.Map
             }
 
             //Now compress everything into a tarball, thanks to .NET 7
-            var tarName = $"{packagedir}/{this.ComponentID.ShortID()}-{this.ComponentName}.tar";
+            /*var tarName = $"{Path.GetTempPath()}tartemp/{this.ComponentID.ShortID()}-{this.ComponentName}.tar";
+            TarFile.CreateFromDirectory(workdir, tarName, false);*/
+
             MemoryStream ms = new MemoryStream();
             await TarFile.CreateFromDirectoryAsync(workdir,
                 ms,
                 includeBaseDirectory: false);
+            ms.Seek(0, SeekOrigin.Begin);
             return ms;
 
 
@@ -65,14 +68,39 @@ namespace BudgetLambda.CoreLib.Component.Map
             {
                 Tags = new List<string> { this.ImageTag }
             };
-            await client.Images.BuildImageFromDockerfileAsync( parameters, tarball, null, null, null);
-            await client.Images.PushImageAsync(this.ImageTag, null, null, null);
+            await client.Images.BuildImageFromDockerfileAsync(parameters, 
+                tarball, 
+                new List<AuthConfig>(),
+                new Dictionary<string, string>(),
+                new Progress<JSONMessage>(m => m.DumpStream()));
+            await client.Images.PushImageAsync(this.ImageTag, 
+                new ImagePushParameters(),
+                new AuthConfig(),
+                new Progress<JSONMessage>(s => s.DumpStream()));
 
             return true;
         }
-        public override string GenerateDeploymentManifest(string masterExchange)
+        public override FunctionDefinition GenerateDeploymentManifest(string masterExchange, IConfiguration configuration)
         {
-            throw new NotImplementedException();
+            var res = new FunctionDefinition
+            {
+                Service = $"func-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower(),
+                Image = this.ImageTag,
+                Network = "deprecated",
+                ReadOnlyRootFilesystem = true,
+                EnvVars = new Dictionary<string, string>()
+                {
+                    {"RabbitMQ__Hostname" , configuration.GetValue<string>("Infrastructure:RabbitMQ:Hostname")},
+                    {"RabbitMQ__Username" , configuration.GetValue<string>("Infrastructure:RabbitMQ:Username")},
+                    {"RabbitMQ__Password" , configuration.GetValue<string>("Infrastructure:RabbitMQ:Password")},
+                    { "RabbitMQ__VirtualHost" , "budget"},
+                    { "Pipeline__Exchange" , masterExchange},
+                    { "Pipeline__Queue", $"func-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower() },
+                    { "Pipeline__InputKey", this.InputKey },
+                    { "Pipeline__OutputKey" , this.OutputKey},
+                },
+            };
+            return res;
         }
 
         private string ScaffoldInputModel()
@@ -92,8 +120,9 @@ namespace CSharpFunction
 """;
             var builder = new StringBuilder();
             builder.AppendLine(prefix);
-            var decl = this.InputSchema.Mapping.Select(s => $"public {s.Type} {s.Identifier} {{get; set;}}").Aggregate((a,b) => $"{a}\n{b}");
+            var decl = this.InputSchema.Mapping.Select(s => $"public {ConvertNativeType(s.Type)} {s.Identifier} {{get; set;}}").Aggregate((a,b) => $"{a}\n{b}");
             builder.AppendLine(decl);
+            builder.AppendLine(postfix);
             return builder.ToString();
         }
 
@@ -113,8 +142,9 @@ namespace CSharpFunction
 """;
             var builder = new StringBuilder();
             builder.AppendLine(prefix);
-            var decl = this.OutputSchema.Mapping.Select(s => $"public {s.Type} {s.Identifier} {{get; set;}}").Aggregate((a, b) => $"{a}\n{b}");
+            var decl = this.OutputSchema.Mapping.Select(s => $"public {ConvertNativeType(s.Type)} {s.Identifier} {{get; set;}}").Aggregate((a, b) => $"{a}\n{b}");
             builder.AppendLine(decl);
+            builder.AppendLine(postfix);
             return builder.ToString();
         }
 
@@ -137,6 +167,17 @@ namespace CSharpFunction
             builder.AppendLine(this.Code);
             builder.AppendLine(postfix);
             return builder.ToString();
+        }
+
+        private string ConvertNativeType(DataType t)
+        {
+            return t switch 
+            { 
+                DataType.Boolean => "bool",
+                DataType.String => "string",
+                DataType.Float => "double",
+                DataType.Integer => "int",
+            };
         }
     }
 }

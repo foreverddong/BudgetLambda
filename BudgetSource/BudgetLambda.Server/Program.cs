@@ -1,3 +1,5 @@
+using BudgetLambda.CoreLib.Scheduler;
+using BudgetLambda.CoreLib.Utility.Faas;
 using BudgetLambda.Server.Areas.Identity;
 using BudgetLambda.Server.Data;
 using Microsoft.AspNetCore.Components;
@@ -28,6 +30,8 @@ namespace BudgetLambda.Server
             builder.Services.AddMudServices();
             builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             builder.Services.AddSingleton<WeatherForecastService>();
+            builder.Services.AddSingleton<FaasClient>();
+            builder.Services.AddSingleton<BudgetWorkloadScheduler>();
 
             var app = builder.Build();
 

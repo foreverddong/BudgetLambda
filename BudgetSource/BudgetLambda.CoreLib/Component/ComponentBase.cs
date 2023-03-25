@@ -22,9 +22,9 @@ namespace BudgetLambda.CoreLib.Component
         public string OutputKey { get; set; }
         public List<ComponentBase> Next { get; set; }
 
-        public virtual string ImageTag => $"registry.donglinxu.com/budgetuser/{this.ComponentID.ShortID()}-{this.ComponentName}:latest";
+        public virtual string ImageTag => $"registry.donglinxu.com/budgetuser/{this.ComponentID.ShortID()}-{this.ComponentName.ToLower()}:latest";
 
-        public abstract Task<MemoryStream> CreateWorkingPackage(string workdir, string packagedir, IConfiguration configuration);
+        public abstract Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration);
         public abstract Task<bool> BuildImage(MemoryStream tarball, IConfiguration configuration);
         public abstract FunctionDefinition GenerateDeploymentManifest( string masterExchange, IConfiguration configuration);
 

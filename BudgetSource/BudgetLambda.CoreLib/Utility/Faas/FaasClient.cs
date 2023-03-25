@@ -33,7 +33,7 @@ namespace BudgetLambda.CoreLib.Utility.Faas
 
         public FaasClient(IConfiguration configuration)
         {
-            BaseUrl = configuration.GetValue<string>("OpenFaas:GatewayAddr");
+            BaseUrl = configuration.GetValue<string>("Infrastructure:OpenFaas:GatewayAddr");
             _httpClient = new HttpClient();
             _settings = new System.Lazy<System.Text.Json.JsonSerializerOptions>(CreateSerializerSettings);
         }

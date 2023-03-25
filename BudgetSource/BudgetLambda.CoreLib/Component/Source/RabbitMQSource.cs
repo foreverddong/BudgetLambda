@@ -17,7 +17,7 @@ namespace BudgetLambda.CoreLib.Component.Source
             throw new NotImplementedException();
         }
 
-        public override Task<MemoryStream> CreateWorkingPackage(string workdir, string packagedir, IConfiguration configuration)
+        public override Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             throw new NotImplementedException();
         }

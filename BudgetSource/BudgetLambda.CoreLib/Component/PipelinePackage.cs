@@ -1,4 +1,5 @@
 ﻿using BudgetLambda.CoreLib.Business;
+using BudgetLambda.CoreLib.Utility.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +17,7 @@ namespace BudgetLambda.CoreLib.Component
         public string PackageName { get; set; }
         public ComponentBase Source { get; set; }
 
-        public string ExchangeName { get; set; }
+        public string ExchangeName => $"{PackageID.ShortID()}-{PackageName}";
 
         public bool Validate()
         {
