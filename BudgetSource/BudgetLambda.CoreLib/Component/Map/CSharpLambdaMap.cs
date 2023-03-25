@@ -18,6 +18,8 @@ namespace BudgetLambda.CoreLib.Component.Map
 
         public string Code { get; set; }
 
+        public override ComponentType Type => ComponentType.Map;
+
         public override async Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             //Download the dockerfile

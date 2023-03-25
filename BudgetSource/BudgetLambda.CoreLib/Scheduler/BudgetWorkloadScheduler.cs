@@ -50,7 +50,12 @@ namespace BudgetLambda.CoreLib.Scheduler
 
         public async Task SchedulePackage(string workdir)
         {
-        
+            package.ConfigurePackage();
+            var allcomponents = package.Source.AllChildComponents;
+            foreach (var c in allcomponents) 
+            {
+                await this.ScheduleComponent(workdir, c);
+            }
         }
 
         public async Task ScheduleComponent(string workdir, ComponentBase component)

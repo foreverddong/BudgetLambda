@@ -11,7 +11,9 @@ namespace BudgetLambda.CoreLib.Component.Sink
 {
     public class StdoutSink : ComponentBase
     {
-        public override string ImageTag => "";
+        public override string ImageTag => "registry-ui.donglinxu.com/budget/stdoutsink:latest";
+
+        public override ComponentType Type => ComponentType.Sink;
 
         public override Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {

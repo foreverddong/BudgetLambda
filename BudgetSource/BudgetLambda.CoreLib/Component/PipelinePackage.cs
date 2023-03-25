@@ -33,9 +33,10 @@ namespace BudgetLambda.CoreLib.Component
             return true;
         }
 
-        public string GenerateManifest()
+        public void ConfigurePackage()
         {
-            throw new NotImplementedException();
+            var starting = this.Source;
+            starting.ConfigureKey("");
         }
     }
 }

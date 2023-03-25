@@ -16,6 +16,8 @@ namespace BudgetLambda.CoreLib.Component.Source
 
         public override string ImageTag => "registry-ui.donglinxu.com/budget/httpsource:latest";
 
+        public override ComponentType Type => ComponentType.Source;
+
         public override Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             return Task.FromResult((MemoryStream)null);

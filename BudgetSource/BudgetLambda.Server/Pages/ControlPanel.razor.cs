@@ -1,6 +1,9 @@
 ﻿using BudgetLambda.CoreLib.Business;
 using BudgetLambda.CoreLib.Component;
 using BudgetLambda.CoreLib.Component.Map;
+using BudgetLambda.CoreLib.Component.Sink;
+using BudgetLambda.CoreLib.Component.Source;
+using BudgetLambda.CoreLib.Utility.Extensions;
 
 namespace BudgetLambda.Server.Pages
 {
@@ -8,7 +11,46 @@ namespace BudgetLambda.Server.Pages
     {
         public async Task SampleWorkflow()
         {
-            var component = new CSharpLambdaMap
+            var maptimestwo = new CSharpLambdaMap
+            {
+                Code =
+    """
+        public OutputModel HandleData(InputModel data)
+        {
+            var output = new OutputModel();
+            output.Letters = (data.Digits * 2).ToString();
+            return output;
+        }
+""",
+                InputSchema = new CoreLib.Component.DataSchema
+                {
+                    Mapping = new List<CoreLib.Component.PropertyDefinition>()
+                    {
+                        new CoreLib.Component.PropertyDefinition
+                        {
+                            Type = CoreLib.Component.DataType.Integer,
+                            Identifier = "Digits"
+                        }
+                    }
+                },
+
+                OutputSchema = new CoreLib.Component.DataSchema
+                {
+                    Mapping = new List<CoreLib.Component.PropertyDefinition>()
+                    {
+                        new CoreLib.Component.PropertyDefinition
+                        {
+                            Type = CoreLib.Component.DataType.String,
+                            Identifier = "Letters"
+                        }
+                    }
+
+                },
+
+                ComponentName = "CSharpMapTimesTwo",
+
+            };
+            var mapplusthirty = new CSharpLambdaMap
             {
                 Code =
     """
@@ -44,11 +86,24 @@ namespace BudgetLambda.Server.Pages
                     
                 },
 
-                ComponentName = "SomeMapFunction",
-                InputKey = "41cc569f-SampleSource-Output",
-                OutputKey = "41cc569f-SampleFunction-Output",
+                ComponentName = "CSharpMapPlusThirty",
                 
             };
+            var httpsource = new HttpSource
+            {
+                ComponentName = "NEUHttpSource"
+            };
+            var stdoutsink1 = new StdoutSink
+            {
+                ComponentName = "NEUStdoutSink1"
+            };
+            var stdoutsink2 = new StdoutSink
+            {
+                ComponentName = "NEUStdoutSink2"
+            };
+            httpsource.Next = new() { mapplusthirty, maptimestwo };
+            mapplusthirty.Next = new() { stdoutsink1 };
+            maptimestwo.Next = new() { stdoutsink2 };
             var tenant = new BudgetTenant
             {
                 TenantName = "NEU",
@@ -57,11 +112,11 @@ namespace BudgetLambda.Server.Pages
             {
                 Tenant = tenant,
                 PackageName = "SamplePipeline",
-                Source = null,
+                Source = httpsource,
             };
             scheduler.LoadPackage(package);
             await scheduler.ConfigureMQ();
-            await scheduler.ScheduleComponent($"{Path.GetTempPath()}budgettemp", component);
+            await scheduler.SchedulePackage($"{Path.GetTempPath}budget-{package.PackageName}-{Guid.NewGuid().ShortID()}/");
         }
     }
 }
