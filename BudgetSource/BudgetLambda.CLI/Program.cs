@@ -39,7 +39,7 @@ namespace BudgetLambda.CLI
 
             var scheduler = Services.GetRequiredService<BudgetWorkloadScheduler>();
             var pack = this.BuildSamplePipeline();
-            await scheduler.ConfigureMQ(pack);
+            await scheduler.ConfigureMQ();
 
         }
 
@@ -55,7 +55,6 @@ namespace BudgetLambda.CLI
             var package = new PipelinePackage
             {
                 PackageID = Guid.NewGuid(),
-                ExchangeName = "SamplePipeline",
                 PackageName = "SamplePipeline",
                 Source = null,
                 Tenant = SampleTenant,
