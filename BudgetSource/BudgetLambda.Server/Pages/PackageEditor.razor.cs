@@ -36,7 +36,6 @@ namespace BudgetLambda.Server.Pages
             }
             this.healthy = await package.CheckHealth();
 
-
         }
 
         private async Task SavePackage()

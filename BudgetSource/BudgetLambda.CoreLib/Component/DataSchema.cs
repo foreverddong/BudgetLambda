@@ -11,6 +11,7 @@ namespace BudgetLambda.CoreLib.Component
     {
         [Key]
         public Guid SchemaID { get; set; } = Guid.NewGuid();
+        public string? SchemaName { get; set; }
 
         public virtual List<PropertyDefinition> Mapping { get; set; } = new();
     }
