@@ -1,4 +1,5 @@
 ﻿using BudgetLambda.CoreLib.Component;
+using BudgetLambda.CoreLib.Utility.Extensions;
 using BudgetLambda.CoreLib.Utility.Faas;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
@@ -15,7 +16,7 @@ namespace BudgetLambda.CoreLib.Scheduler
         private readonly IConfiguration configuration;
         private readonly FaasClient client;
         private PipelinePackage package;
-        private string exchangeName => $"ex-{package.Tenant.Prefix}-{package.ExchangeName}";
+        private string exchangeName => $"ex-{package.PackageID.ShortID()}-{package.ExchangeName}";
 
 
         public BudgetWorkloadScheduler(IConfiguration conf, FaasClient _client)

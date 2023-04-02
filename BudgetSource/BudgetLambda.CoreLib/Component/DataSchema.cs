@@ -12,7 +12,7 @@ namespace BudgetLambda.CoreLib.Component
         [Key]
         public Guid SchemaID { get; set; } = Guid.NewGuid();
 
-        public List<PropertyDefinition> Mapping { get; set; } = new();
+        public virtual List<PropertyDefinition> Mapping { get; set; } = new();
     }
 
     public enum DataType

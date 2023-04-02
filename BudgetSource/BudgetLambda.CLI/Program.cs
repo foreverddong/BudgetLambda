@@ -1,5 +1,4 @@
-﻿using BudgetLambda.CoreLib.Business;
-using BudgetLambda.CoreLib.Component;
+﻿using BudgetLambda.CoreLib.Component;
 using BudgetLambda.CoreLib.Scheduler;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,11 +44,6 @@ namespace BudgetLambda.CLI
 
         public PipelinePackage BuildSamplePipeline()
         {
-            var SampleTenant = new BudgetTenant
-            {
-                TenantID = Guid.Parse("41cc569f-9e9d-4bcb-8182-0a46ebd3d19c"),
-                TenantName = "BudgetOrg",
-            };
 
             //41cc569f-SamplePipeline
             var package = new PipelinePackage
@@ -57,7 +51,7 @@ namespace BudgetLambda.CLI
                 PackageID = Guid.NewGuid(),
                 PackageName = "SamplePipeline",
                 Source = null,
-                Tenant = SampleTenant,
+                Tenant = "xudong",
             };
 
             return package;

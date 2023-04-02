@@ -3,6 +3,7 @@ using System;
 using BudgetLambda.CoreLib.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BudgetLambda.CoreLib.Migrations
 {
     [DbContext(typeof(BudgetContext))]
-    partial class BudgetContextModelSnapshot : ModelSnapshot
+    [Migration("20230401223209_SchemasOnPackage")]
+    partial class SchemasOnPackage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,6 +28,21 @@ namespace BudgetLambda.CoreLib.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("BudgetLambda.CoreLib.Business.BudgetTenant", b =>
+                {
+                    b.Property<Guid>("TenantID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("TenantName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("TenantID");
+
+                    b.ToTable("Tenants", "Budget");
+                });
 
             modelBuilder.Entity("BudgetLambda.CoreLib.Component.ComponentBase", b =>
                 {
@@ -93,21 +111,22 @@ namespace BudgetLambda.CoreLib.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("SchamasSchemaID")
+                    b.Property<Guid>("SchamasSchemaID")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("SourceComponentID")
+                    b.Property<Guid>("SourceComponentID")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Tenant")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("TenantID")
+                        .HasColumnType("uuid");
 
                     b.HasKey("PackageID");
 
                     b.HasIndex("SchamasSchemaID");
 
                     b.HasIndex("SourceComponentID");
+
+                    b.HasIndex("TenantID");
 
                     b.ToTable("PipelinePackages", "Budget");
                 });
@@ -199,15 +218,27 @@ namespace BudgetLambda.CoreLib.Migrations
                 {
                     b.HasOne("BudgetLambda.CoreLib.Component.DataSchema", "Schamas")
                         .WithMany()
-                        .HasForeignKey("SchamasSchemaID");
+                        .HasForeignKey("SchamasSchemaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BudgetLambda.CoreLib.Component.ComponentBase", "Source")
                         .WithMany()
-                        .HasForeignKey("SourceComponentID");
+                        .HasForeignKey("SourceComponentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BudgetLambda.CoreLib.Business.BudgetTenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Schamas");
 
                     b.Navigation("Source");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("BudgetLambda.CoreLib.Component.PropertyDefinition", b =>

@@ -1,0 +1,22 @@
+﻿@inject BudgetLambda.CoreLib.Database.BudgetContext database
+@inject NavigationManager navigation
+@using BudgetLambda.CoreLib.Component
+
+<MudText Typo="Typo.h3">Hello, @User.Identity.Name !</MudText>
+<MudDivider/>
+
+<MudTable Items="@pipelinePackages" FixedHeader="true" FixedFooter="true" Height="800px" OnRowClick="RowClicked" T="PipelinePackage">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Active Packages</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Create" Color="Color.Primary" OnClick="NavigateToCreation">Create New</MudButton>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Package ID</MudTh>
+        <MudTh>Package Name</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.PackageID</MudTd>
+        <MudTd>@context.PackageName</MudTd>
+    </RowTemplate>
+</MudTable>

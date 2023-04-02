@@ -1,4 +1,4 @@
-﻿using BudgetLambda.CoreLib.Business;
+﻿
 using BudgetLambda.CoreLib.Utility.Extensions;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -16,11 +16,11 @@ namespace BudgetLambda.CoreLib.Component
         [Key]
         public Guid ComponentID { get; set; } = Guid.NewGuid();
         public string ComponentName { get; set; }
-        public DataSchema InputSchema { get; set; }
-        public DataSchema OutputSchema { get; set; }
+        public virtual DataSchema InputSchema { get; set; }
+        public virtual DataSchema OutputSchema { get; set; }
         public string InputKey { get; set; }
         public string OutputKey { get; set; }
-        public List<ComponentBase> Next { get; set; } = new();
+        public virtual List<ComponentBase> Next { get; set; } = new();
 
         public virtual string ImageTag => $"registry.donglinxu.com/budgetuser/{this.ComponentID.ShortID()}-{this.ComponentName.ToLower()}:latest";
         public virtual List<ComponentBase> AllChildComponents => this.Next.SelectMany(c => c.AllChildComponents).Append(this).ToList();

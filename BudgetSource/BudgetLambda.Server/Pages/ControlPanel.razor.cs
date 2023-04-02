@@ -1,4 +1,4 @@
-﻿using BudgetLambda.CoreLib.Business;
+﻿
 using BudgetLambda.CoreLib.Component;
 using BudgetLambda.CoreLib.Component.Map;
 using BudgetLambda.CoreLib.Component.Sink;
@@ -104,13 +104,9 @@ namespace BudgetLambda.Server.Pages
             httpsource.Next = new() { mapplusthirty, maptimestwo };
             mapplusthirty.Next = new() { stdoutsink1 };
             maptimestwo.Next = new() { stdoutsink2 };
-            var tenant = new BudgetTenant
-            {
-                TenantName = "NEU",
-            };
             var package = new PipelinePackage
             {
-                Tenant = tenant,
+                Tenant = "xudong",
                 PackageName = "SamplePipeline",
                 Source = httpsource,
             };

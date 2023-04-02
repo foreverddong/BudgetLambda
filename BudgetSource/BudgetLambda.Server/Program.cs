@@ -1,3 +1,4 @@
+using BudgetLambda.CoreLib.Database;
 using BudgetLambda.CoreLib.Scheduler;
 using BudgetLambda.CoreLib.Utility.Faas;
 using BudgetLambda.Server.Areas.Identity;
@@ -23,15 +24,28 @@ namespace BudgetLambda.Server
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             builder.Services.AddMudServices();
             builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            builder.Services.AddDbContext<BudgetContext>();
+                
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSingleton<FaasClient>();
             builder.Services.AddSingleton<BudgetWorkloadScheduler>();
+
+            builder.Services.Configure<IdentityOptions>(options => 
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+            });
+
 
             var app = builder.Build();
 

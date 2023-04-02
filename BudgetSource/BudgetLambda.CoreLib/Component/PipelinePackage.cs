@@ -1,4 +1,4 @@
-﻿using BudgetLambda.CoreLib.Business;
+﻿
 using BudgetLambda.CoreLib.Utility.Extensions;
 using System;
 using System.Collections.Generic;
@@ -13,9 +13,12 @@ namespace BudgetLambda.CoreLib.Component
     {
         [Key]
         public Guid PackageID { get; set; } = Guid.NewGuid();
-        public BudgetTenant Tenant { get; set; }
+        public string Tenant { get; set; }
         public string PackageName { get; set; }
-        public ComponentBase Source { get; set; }
+        public virtual ComponentBase? Source { get; set; }
+        public virtual DataSchema? Schamas { get; set; }
+
+        public virtual List<ComponentBase>? ChildComponents { get; set; }
 
         public string ExchangeName => $"{PackageID.ShortID()}-{PackageName}";
 
@@ -33,6 +36,12 @@ namespace BudgetLambda.CoreLib.Component
             return true;
         }
 
+        public async Task<bool> CheckHealth()
+        {
+#warning TODO
+            // Check the health of the entire pipeline.
+            return true;
+        }
         public void ConfigurePackage()
         {
             var starting = this.Source;
