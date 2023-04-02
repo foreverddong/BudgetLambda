@@ -18,8 +18,8 @@ namespace BudgetLambda.CoreLib.Component
         public string ComponentName { get; set; }
         public virtual DataSchema InputSchema { get; set; }
         public virtual DataSchema OutputSchema { get; set; }
-        public string InputKey { get; set; }
-        public string OutputKey { get; set; }
+        public string InputKey { get; private set; }
+        public string OutputKey { get; private set; }
         public virtual List<ComponentBase> Next { get; set; } = new();
 
         public virtual string ImageTag => $"registry.donglinxu.com/budgetuser/{this.ComponentID.ShortID()}-{this.ComponentName.ToLower()}:latest";

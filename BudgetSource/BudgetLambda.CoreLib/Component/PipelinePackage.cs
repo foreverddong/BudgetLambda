@@ -47,5 +47,10 @@ namespace BudgetLambda.CoreLib.Component
             var starting = this.Source;
             starting.ConfigureKey("");
         }
+
+        public List<ComponentBase> FindOrphanedComponents()
+        {
+            return this.ChildComponents.Except(this.Source.AllChildComponents).ToList();
+        }
     }
 }

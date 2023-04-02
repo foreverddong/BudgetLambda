@@ -27,7 +27,7 @@ namespace BudgetLambda.CoreLib.Component
     public class PropertyDefinition
     {
         [Key]
-        public Guid DefinitionID { get; set; }
+        public Guid DefinitionID { get; set; } = Guid.NewGuid();
         public DataType Type { get; set; }
         public string Identifier { get; set; }
     }
