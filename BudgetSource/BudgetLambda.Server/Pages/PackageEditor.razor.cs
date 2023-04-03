@@ -91,5 +91,10 @@ namespace BudgetLambda.Server.Pages
             await package.PurgePipeline(client);
             this.creating = false;
         }
+
+        private void OnClickManageComponent()
+        {
+            navigation.NavigateTo($"/packageeditor/{this.package.PackageID}/manage-component");
+        }
     }
 }
