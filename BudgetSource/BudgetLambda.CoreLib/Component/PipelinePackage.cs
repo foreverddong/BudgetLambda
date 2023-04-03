@@ -16,7 +16,8 @@ namespace BudgetLambda.CoreLib.Component
         public string Tenant { get; set; }
         public string PackageName { get; set; }
         public virtual ComponentBase? Source { get; set; }
-        public virtual DataSchema? Schamas { get; set; }
+        //should be a list of schemas
+        public virtual List<DataSchema> Schamas { get; set; } = new(); 
 
         public virtual List<ComponentBase>? ChildComponents { get; set; }
 
@@ -24,7 +25,7 @@ namespace BudgetLambda.CoreLib.Component
 
         public bool Validate()
         {
-#warning TODO
+//#warning TODO
             /*
              *   Things to consider here:
              *   1. There must be no loop in the pipeline
@@ -38,7 +39,7 @@ namespace BudgetLambda.CoreLib.Component
 
         public async Task<bool> CheckHealth()
         {
-#warning TODO
+//#warning TODO
             // Check the health of the entire pipeline.
             return true;
         }
