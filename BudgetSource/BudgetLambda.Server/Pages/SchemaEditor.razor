@@ -1,5 +1,6 @@
 ﻿@page "/schemaeditor/{packageid:guid}"
 @using BudgetLambda.CoreLib.Database
+@using static BudgetLambda.CoreLib.Component.DataSchema
 @inject BudgetContext database
 @*// list existing schema (edit)*@
 @*// add new option*@
@@ -7,34 +8,33 @@
     <MudGrid>
         <h1>Edit Schema</h1>
 
-        <MudForm>
-            <MudTextField Label="Schema Name" @bind-Value="@schema.SchemaName" />
+        <MudForm Model="@schema" OnValidSubmit="@SaveSchema">
+            <MudTextField @bind-Value="schema.SchemaName" Label="Schema Name" Required="true" />
             <MudTable Items="@schema.Mapping">
                 <HeaderContent>
-                    <MudTh>Property Name</MudTh>
-                    <MudTh>Data Type</MudTh>
+                    <MudTh>Type</MudTh>
+                    <MudTh>Identifier</MudTh>
                     <MudTh></MudTh>
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd>
-                        <MudTextField @bind-Value="@context.Property.Identifier" />
+                            <MudSelect T="string" Label="Coffee" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem Value="@("Cappuccino")" />
+                                <MudSelectItem Value="@("Cafe Latte")" />
+                                <MudSelectItem Value="@("Espresso")" />
+                            </MudSelect>
+                   </MudTd>
+                    <MudTd>
+                        <MudTextField @bind-Value="context.Identifier" Label="Identifier" Required="true" />
                     </MudTd>
                     <MudTd>
-                        <MudSelect @bind-Value="@context.Property.Type">
-                            <MudSelectItem Value="DataType.Integer">Integer</MudSelectItem>
-                            <MudSelectItem Value="DataType.Float">Float</MudSelectItem>
-                            <MudSelectItem Value="DataType.Boolean">Boolean</MudSelectItem>
-                            <MudSelectItem Value="DataType.String">String</MudSelectItem>
-                        </MudSelect>
+                        <MudIconButton Icon="MudIcons.Outlined.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(() => RemoveDefinition(context.DefinitionID))" />
                     </MudTd>
-                    @*<MudTd>
-                        <MudIconButton Icon="Icons.Outlined.Clear" Color="Color.Error" OnClick="@(() => RemoveRow(context.Index))" />
-                    </MudTd>*@
                 </RowTemplate>
             </MudTable>
-            @*<MudButton Icon="Icons.Outlined.Add" Color="Color.Primary" Variant="Variant.Filled" Class="mt-4">Add Property</MudButton>*@
-            @*<MudButton Color="Color.Primary" Variant="Variant.Filled" Class="mt-4" OnClick="@SaveSchema">Save</MudButton>*@
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@AddDefinition">Add</MudButton>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="submit">Save</MudButton>
         </MudForm>
-
     </MudGrid>
 </MudContainer>
+
