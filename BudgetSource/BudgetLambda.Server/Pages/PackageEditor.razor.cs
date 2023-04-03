@@ -95,6 +95,9 @@ namespace BudgetLambda.Server.Pages
             this.creating = true;
             await package.PurgePipeline(client);
             this.creating = false;
+        private void OnClickManageComponent()
+        {
+            navigation.NavigateTo($"/packageeditor/{this.package.PackageID}/manage-component");
         }
     }
 }
