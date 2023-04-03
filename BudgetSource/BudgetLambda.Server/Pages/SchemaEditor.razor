@@ -1,4 +1,40 @@
-﻿@page "/schemaeditor/{packageid}"
+﻿@page "/schemaeditor/{packageid:guid}"
 @using BudgetLambda.CoreLib.Database
 @inject BudgetContext database
+@*// list existing schema (edit)*@
+@*// add new option*@
+<MudContainer>
+    <MudGrid>
+        <h1>Edit Schema</h1>
 
+        <MudForm>
+            <MudTextField Label="Schema Name" @bind-Value="@schema.SchemaName" />
+            <MudTable Items="@schema.Mapping">
+                <HeaderContent>
+                    <MudTh>Property Name</MudTh>
+                    <MudTh>Data Type</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>
+                        <MudTextField @bind-Value="@context.Property.Identifier" />
+                    </MudTd>
+                    <MudTd>
+                        <MudSelect @bind-Value="@context.Property.Type">
+                            <MudSelectItem Value="DataType.Integer">Integer</MudSelectItem>
+                            <MudSelectItem Value="DataType.Float">Float</MudSelectItem>
+                            <MudSelectItem Value="DataType.Boolean">Boolean</MudSelectItem>
+                            <MudSelectItem Value="DataType.String">String</MudSelectItem>
+                        </MudSelect>
+                    </MudTd>
+                    @*<MudTd>
+                        <MudIconButton Icon="Icons.Outlined.Clear" Color="Color.Error" OnClick="@(() => RemoveRow(context.Index))" />
+                    </MudTd>*@
+                </RowTemplate>
+            </MudTable>
+            @*<MudButton Icon="Icons.Outlined.Add" Color="Color.Primary" Variant="Variant.Filled" Class="mt-4">Add Property</MudButton>*@
+            @*<MudButton Color="Color.Primary" Variant="Variant.Filled" Class="mt-4" OnClick="@SaveSchema">Save</MudButton>*@
+        </MudForm>
+
+    </MudGrid>
+</MudContainer>
