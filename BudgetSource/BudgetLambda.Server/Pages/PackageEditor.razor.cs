@@ -47,5 +47,10 @@ namespace BudgetLambda.Server.Pages
             await database.SaveChangesAsync();
             navigation.NavigateTo($"/packageeditor/{this.package.PackageID}/", true);
         }
+
+        private void OnClickManageComponent()
+        {
+            navigation.NavigateTo($"/packageeditor/{this.package.PackageID}/manage-component");
+        }
     }
 }
