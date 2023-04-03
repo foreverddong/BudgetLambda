@@ -6,35 +6,46 @@
 @*// add new option*@
 <MudContainer>
     <MudGrid>
-        <h1>Edit Schema</h1>
+        <MudItem md="12">
 
-        <MudForm Model="@schema" OnValidSubmit="@SaveSchema">
-            <MudTextField @bind-Value="schema.SchemaName" Label="Schema Name" Required="true" />
-            <MudTable Items="@schema.Mapping">
-                <HeaderContent>
-                    <MudTh>Type</MudTh>
-                    <MudTh>Identifier</MudTh>
-                    <MudTh></MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd>
-                            <MudSelect T="string" Label="Coffee" AnchorOrigin="Origin.BottomCenter">
-                                <MudSelectItem Value="@("Cappuccino")" />
-                                <MudSelectItem Value="@("Cafe Latte")" />
-                                <MudSelectItem Value="@("Espresso")" />
+            <h1>Edit Schema</h1>
+
+            <MudForm Model="@schema" OnValidSubmit="@SaveSchema">
+                <MudTextField @bind-Value="schema.SchemaName" Label="Schema Name" Required="true" />
+                <h3>Property Definition</h3>
+
+                <MudTable Items="@schema.Mapping">
+                    <HeaderContent>
+                        <MudTh>DefinitionID</MudTh>
+                        <MudTh>Data Type</MudTh>
+                        <MudTh>Identifier</MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>
+                            <MudSelect T="string" Label="DataType" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem Value="@("Integer")" />
+                                <MudSelectItem Value="@("Float")" />
+                                <MudSelectItem Value="@("Boolean")" />
+                                <MudSelectItem Value="@("String")" />
+                                @*<MudSelectItem Value="DataType.Integer">Integer</MudSelectItem>
+                                <MudSelectItem Value="DataType.Float">Float</MudSelectItem>
+                                <MudSelectItem Value="DataType.Boolean">Boolean</MudSelectItem>
+                                <MudSelectItem Value="DataType.String">String</MudSelectItem>*@
                             </MudSelect>
-                   </MudTd>
-                    <MudTd>
-                        <MudTextField @bind-Value="context.Identifier" Label="Identifier" Required="true" />
-                    </MudTd>
-                    <MudTd>
-                        <MudIconButton Icon="MudIcons.Outlined.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(() => RemoveDefinition(context.DefinitionID))" />
-                    </MudTd>
-                </RowTemplate>
-            </MudTable>
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@AddDefinition">Add</MudButton>
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="submit">Save</MudButton>
-        </MudForm>
+                        </MudTd>
+                        <MudTd>
+                            <MudTextField @bind-Value="context.Identifier" Label="Identifier" Required="true" />
+                        </MudTd>
+                        <MudTd>
+                            <MudIconButton Icon="MudIcons.Outlined.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(() => RemoveDefinition(context.DefinitionID))" />
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@AddDefinition">Add</MudButton>
+                <MudButton Color="Color.Primary" Variant="Variant.Filled">Save</MudButton>
+            </MudForm>
+            </MudItem>
     </MudGrid>
 </MudContainer>
 
