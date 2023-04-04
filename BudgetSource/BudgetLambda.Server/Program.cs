@@ -35,6 +35,7 @@ namespace BudgetLambda.Server
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSingleton<FaasClient>();
             builder.Services.AddSingleton<BudgetWorkloadScheduler>();
+            builder.Services.AddScoped<SampleComponents>();
 
             builder.Services.Configure<IdentityOptions>(options => 
             {

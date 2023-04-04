@@ -51,7 +51,7 @@ namespace BudgetLambda.CoreLib.Component
 
         public List<ComponentBase> FindOrphanedComponents()
         {
-            return this.ChildComponents.Except(this.Source.AllChildComponents).ToList();
+            return this.ChildComponents.Except(this.Source.AllChildComponents()).ToList();
         }
     }
 }

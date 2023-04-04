@@ -1,6 +1,8 @@
 ﻿@inject BudgetLambda.CoreLib.Database.BudgetContext database
 @inject NavigationManager navigation
+@inject SampleComponents sample
 @using BudgetLambda.CoreLib.Component
+@using BudgetLambda.Server.Data
 
 <MudText Typo="Typo.h3">Hello, @User.Identity.Name !</MudText>
 <MudDivider/>
@@ -10,6 +12,7 @@
         <MudText Typo="Typo.h6">Active Packages</MudText>
         <MudSpacer />
         <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Create" Color="Color.Primary" OnClick="NavigateToCreation">Create New</MudButton>
+        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.SmokeFree" Color="Color.Secondary" OnClick="CreateSamplePackage">Create a Sample Package</MudButton>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>Package ID</MudTh>
