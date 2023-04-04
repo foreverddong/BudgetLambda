@@ -3,6 +3,7 @@ using System;
 using BudgetLambda.CoreLib.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BudgetLambda.CoreLib.Migrations
 {
     [DbContext(typeof(BudgetContext))]
-    partial class BudgetContextModelSnapshot : ModelSnapshot
+    [Migration("20230404090615_MagageSchema")]
+    partial class MagageSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,12 +47,14 @@ namespace BudgetLambda.CoreLib.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("InputKey")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("InputSchemaSchemaID")
                         .HasColumnType("uuid");
 
                     b.Property<string>("OutputKey")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("OutputSchemaSchemaID")

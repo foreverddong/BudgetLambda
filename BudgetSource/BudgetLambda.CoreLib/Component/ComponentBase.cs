@@ -18,12 +18,15 @@ namespace BudgetLambda.CoreLib.Component
         public string ComponentName { get; set; }
         public virtual DataSchema InputSchema { get; set; }
         public virtual DataSchema OutputSchema { get; set; }
-        public string InputKey { get; private set; }
-        public string OutputKey { get; private set; }
+        public string? InputKey { get; private set; }
+        public string? OutputKey { get; private set; }
         public virtual List<ComponentBase> Next { get; set; } = new();
 
         public virtual string ImageTag => $"registry.donglinxu.com/budgetuser/{this.ComponentID.ShortID()}-{this.ComponentName.ToLower()}:latest";
-        public virtual List<ComponentBase> AllChildComponents => this.Next.SelectMany(c => c.AllChildComponents).Append(this).ToList();
+        public List<ComponentBase> AllChildComponents() 
+        { 
+            return this.Next.SelectMany(c => c.AllChildComponents()).Append(this).ToList();
+        } 
 
         public abstract ComponentType Type { get; }
 
