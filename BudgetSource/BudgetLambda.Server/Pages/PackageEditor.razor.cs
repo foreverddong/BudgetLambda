@@ -15,7 +15,7 @@ namespace BudgetLambda.Server.Pages
         private ClaimsPrincipal User { get; set; }
         private PipelinePackage? package;
         private bool creation = false;
-        private bool healthy => this.healthStatus.Any(s => s.status == false);
+        private bool healthy => this.healthStatus.All(s => s.status);
         private bool processing = true;
         private string saveText => creation ? "Confirm Creation" : "Save Pipeline";
         private List<(bool status, string message)> healthStatus = new();
@@ -37,6 +37,7 @@ namespace BudgetLambda.Server.Pages
                 this.package = res.First();
             }
             this.healthStatus = await package.CheckHealth(client);
+            this.processing = false;
             StateHasChanged();
 
         }
