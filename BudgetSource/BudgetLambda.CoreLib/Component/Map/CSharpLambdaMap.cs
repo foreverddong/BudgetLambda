@@ -19,6 +19,7 @@ namespace BudgetLambda.CoreLib.Component.Map
         public string Code { get; set; }
 
         public override ComponentType Type => ComponentType.Map;
+        public override string? ServiceName => $"func-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower();
 
         public override async Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
@@ -86,7 +87,7 @@ namespace BudgetLambda.CoreLib.Component.Map
         {
             var res = new FunctionDefinition
             {
-                Service = $"func-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower(),
+                Service = this.ServiceName,
                 Image = this.ImageTag,
                 Network = "deprecated",
                 ReadOnlyRootFilesystem = true,

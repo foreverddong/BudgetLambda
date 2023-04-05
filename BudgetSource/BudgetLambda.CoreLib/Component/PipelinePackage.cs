@@ -1,5 +1,6 @@
 ﻿
 using BudgetLambda.CoreLib.Utility.Extensions;
+using BudgetLambda.CoreLib.Utility.Faas;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -37,11 +38,12 @@ namespace BudgetLambda.CoreLib.Component
             return true;
         }
 
-        public async Task<bool> CheckHealth()
+        public async Task<List<(bool status, string message)>> CheckHealth(FaasClient client)
         {
-//#warning TODO
-            // Check the health of the entire pipeline.
-            return true;
+            var healthTasks = this.Source.AllChildComponents().Select(c => c.HealthCheck(client)).ToList();
+            var result = (await Task.WhenAll(healthTasks)).ToList();
+            return result;
+            
         }
         public void ConfigurePackage()
         {

@@ -18,6 +18,8 @@ namespace BudgetLambda.CoreLib.Component.Source
 
         public override ComponentType Type => ComponentType.Source;
 
+        public override string? ServiceName => $"source-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower();
+
         public override Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             return Task.FromResult((MemoryStream)null);
@@ -32,7 +34,7 @@ namespace BudgetLambda.CoreLib.Component.Source
         {
             var res = new FunctionDefinition
             {
-                Service = $"source-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower(),
+                Service = ServiceName,
                 Image = this.ImageTag,
                 Network = "deprecated",
                 ReadOnlyRootFilesystem = true,

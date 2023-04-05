@@ -20,6 +20,7 @@ namespace BudgetLambda.CoreLib.Component
         public virtual DataSchema OutputSchema { get; set; }
         public string? InputKey { get; private set; }
         public string? OutputKey { get; private set; }
+        public abstract string? ServiceName { get; }
         public virtual List<ComponentBase> Next { get; set; } = new();
 
         public virtual string ImageTag => $"registry.donglinxu.com/budgetuser/{this.ComponentID.ShortID()}-{this.ComponentName.ToLower()}:latest";
@@ -32,7 +33,7 @@ namespace BudgetLambda.CoreLib.Component
 
         public abstract Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration);
         public abstract Task<bool> BuildImage(MemoryStream tarball, IConfiguration configuration);
-        public abstract FunctionDefinition GenerateDeploymentManifest( string masterExchange, IConfiguration configuration);
+        public abstract FunctionDefinition GenerateDeploymentManifest(string masterExchange, IConfiguration configuration);
         public virtual void ConfigureKey(string selfInput)
         {
             this.InputKey = selfInput;
@@ -40,6 +41,20 @@ namespace BudgetLambda.CoreLib.Component
             foreach (var c in this.Next)
             {
                 c.ConfigureKey(this.OutputKey);
+            }
+        }
+
+        public virtual async Task<(bool status, string message)> HealthCheck(FaasClient client)
+        {
+            var serviceName = this.ServiceName;
+            try
+            {
+                var res = await client.FunctionGETAsync(serviceName);
+                return (true, $"{serviceName} is healthy");
+            }
+            catch (FaasClientException ex)
+            {
+                return (false, ex.Message);
             }
         }
 
