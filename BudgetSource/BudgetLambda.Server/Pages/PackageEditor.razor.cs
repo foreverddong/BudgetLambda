@@ -15,8 +15,10 @@ namespace BudgetLambda.Server.Pages
         private ClaimsPrincipal User { get; set; }
         private PipelinePackage? package;
         private bool creation = false;
-        private bool healthy = false;
+        private bool healthy => this.healthStatus.All(s => s.status);
+        private bool processing = true;
         private string saveText => creation ? "Confirm Creation" : "Save Pipeline";
+        private List<(bool status, string message)> healthStatus = new();
 
         protected override async Task OnInitializedAsync()
         {
@@ -34,7 +36,9 @@ namespace BudgetLambda.Server.Pages
                            select p).ToList();
                 this.package = res.First();
             }
-            this.healthy = await package.CheckHealth();
+            this.healthStatus = await package.CheckHealth(client);
+            this.processing = false;
+            StateHasChanged();
 
         }
 

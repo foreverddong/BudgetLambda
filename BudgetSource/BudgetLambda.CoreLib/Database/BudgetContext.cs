@@ -1,6 +1,7 @@
 ﻿
 using BudgetLambda.CoreLib.Component;
 using BudgetLambda.CoreLib.Component.Map;
+using BudgetLambda.CoreLib.Component.Sink;
 using BudgetLambda.CoreLib.Component.Source;
 //using Castle.Core.Logging;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,8 @@ namespace BudgetLambda.CoreLib.Database
         public DbSet<ComponentBase> Components { get; set; }
         public DbSet<PipelinePackage> PipelinePackages { get; set; }
         public DbSet<CSharpLambdaMap> CSharpLambdaMaps { get; set; }
+        public DbSet<StdoutSink> StdoutSinks { get; set; }
+        public DbSet<HttpSource> HttpSources { get; set; }
         public DbSet<RabbitMQSource> RabbitMQSources { get; set; }
         public DbSet<PropertyDefinition> PropertyDefinitions { get; set; }
 
