@@ -1,8 +1,10 @@
 ﻿using BudgetLambda.CoreLib.Component;
+using BudgetLambda.CoreLib.Utility.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text;
 
 namespace BudgetLambda.Server.Pages
 {
@@ -17,8 +19,13 @@ namespace BudgetLambda.Server.Pages
         private bool creation = false;
         private bool healthy => this.healthStatus.All(s => s.status);
         private bool processing = true;
+
+        private bool creating { get; set; } = false;
+        private int process { get; set; } = 0;
         private string saveText => creation ? "Confirm Creation" : "Save Pipeline";
-        private List<(bool status, string message)> healthStatus = new();
+        private List<(CoreLib.Component.ComponentBase me, bool status, string message)> healthStatus = new();
+
+        private string mermaidDefinition { get; set; } = "";
 
         protected override async Task OnInitializedAsync()
         {
@@ -38,6 +45,7 @@ namespace BudgetLambda.Server.Pages
             }
             this.healthStatus = await package.CheckHealth(client);
             this.processing = false;
+            this.mermaidDefinition = await this.GenerateDiagram();
             StateHasChanged();
 
         }
@@ -50,6 +58,38 @@ namespace BudgetLambda.Server.Pages
             }
             await database.SaveChangesAsync();
             navigation.NavigateTo($"/packageeditor/{this.package.PackageID}/", true);
+        }
+
+        private async Task<string> GenerateDiagram()
+        {
+            var builder = new StringBuilder();
+            builder.AppendLine("flowchart LR;");
+            builder.AppendLine(this.healthStatus
+                .Select(s => $"{s.me.ComponentID}[{s.me.ComponentName}<br/>{s.me.Type}<br/>healthy: {s.status}]")
+                .Aggregate( (a,b) => $"{a}\n{b}"));
+            var mermaidConnections =
+                this.package.ChildComponents.SelectMany(c => c.Next.Select(sub => $"{c.ComponentID} --> {sub.ComponentID}")).Aggregate(String.Empty, (a,b) => $"{a}\n{b}");
+            builder.AppendLine(mermaidConnections);
+            return builder.ToString();
+        }
+
+        private async Task RedeployPipeline()
+        {
+            this.process = 0;
+            this.creating = true;
+            await package.PurgePipeline(client);
+            scheduler.LoadPackage(package);
+            await scheduler.ConfigureMQ();
+            await scheduler.SchedulePackage($"{Path.GetTempPath}budget-{package.PackageName}-{Guid.NewGuid().ShortID()}/", (inc) => { this.process += inc; });
+            this.creating = false;
+        }
+
+        private async Task PurgePipeline()
+        {
+            this.process = 0;
+            this.creating = true;
+            await package.PurgePipeline(client);
+            this.creating = false;
         }
     }
 }

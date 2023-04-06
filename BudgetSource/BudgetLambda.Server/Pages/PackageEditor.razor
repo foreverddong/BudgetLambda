@@ -2,10 +2,17 @@
 @using BudgetLambda.CoreLib.Component
 @using BudgetLambda.CoreLib.Database
 @using BudgetLambda.CoreLib.Utility.Faas
+@using BudgetLambda.CoreLib.Scheduler
 @inject BudgetContext database
 @inject NavigationManager navigation
 @inject FaasClient client
+@inject BudgetWorkloadScheduler scheduler
 
+<MudOverlay @bind-Visible="processing" DarkBackground="true" AutoClose="false">
+    <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+    <MudProgressCircular Color="Color.Info" Size="Size.Large" Value="@process" />
+    <MudProgressLinear Color="Color.Info" Size="Size.Medium" Value="@process" Class="my-7" />
+</MudOverlay>
 
 <MudContainer>
     <MudGrid>
@@ -43,8 +50,17 @@
                     <MudListItem Text="Manage Components"></MudListItem>
                     <MudListItem Text="Manage Schemas"></MudListItem>
                     <MudListItem Text="@saveText" OnClick="SavePackage"></MudListItem>
+                    <MudListItem Text="Bring Package Offline" OnClick="PurgePipeline"></MudListItem>
+                    @if (!creating)
+                    {
+                        <MudListItem Text="Redeploy Pipeline" OnClick="RedeployPipeline"></MudListItem>
+                    }
+                    
                 </MudList>
             </MudPaper>
+        </MudItem>
+        <MudItem md="9">
+            <MermaidDiagram Definition="@mermaidDefinition"></MermaidDiagram>
         </MudItem>
     </MudGrid>
 </MudContainer>
