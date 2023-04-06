@@ -113,7 +113,7 @@ namespace BudgetLambda.Server.Pages
             };
             scheduler.LoadPackage(package);
             await scheduler.ConfigureMQ();
-            await scheduler.SchedulePackage($"{Path.GetTempPath}budget-{package.PackageName}-{Guid.NewGuid().ShortID()}/");
+            await scheduler.SchedulePackage($"{Path.GetTempPath}budget-{package.PackageName}-{Guid.NewGuid().ShortID()}/",(a) => { });
         }
 
         public async Task Testbed()

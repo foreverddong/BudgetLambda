@@ -44,17 +44,17 @@ namespace BudgetLambda.CoreLib.Component
             }
         }
 
-        public virtual async Task<(bool status, string message)> HealthCheck(FaasClient client)
+        public virtual async Task<(ComponentBase me, bool status, string message)> HealthCheck(FaasClient client)
         {
             var serviceName = this.ServiceName;
             try
             {
                 var res = await client.FunctionGETAsync(serviceName);
-                return (true, $"{serviceName} is healthy");
+                return (this, true, $"{serviceName} is healthy");
             }
             catch (FaasClientException ex)
             {
-                return (false, ex.Message);
+                return (this, false, ex.Message);
             }
         }
 

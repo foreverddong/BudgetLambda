@@ -36,7 +36,7 @@ namespace BudgetLambda.Server.Data
             {
                 PackageName = name,
                 Tenant = tenant,
-                //ChildComponents = new() { httpsource, countingLambda, allcapsLambda, countingSink, allcapsSink },
+                ChildComponents = new() { httpsource, countingLambda, allcapsLambda, countingSink, allcapsSink },
                 Schamas = new() { documentSchema, countingSchema, allcapsSchema },
                 Source = httpsource,
             };

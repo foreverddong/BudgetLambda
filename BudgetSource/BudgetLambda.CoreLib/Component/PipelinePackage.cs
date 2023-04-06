@@ -22,7 +22,7 @@ namespace BudgetLambda.CoreLib.Component
 
         public virtual List<ComponentBase>? ChildComponents { get; set; }
 
-        public string ExchangeName => $"{PackageID.ShortID()}-{PackageName}";
+        public string ExchangeName => $"ex-{PackageID.ShortID()}-{PackageName}";
 
         public bool Validate()
         {
@@ -38,7 +38,7 @@ namespace BudgetLambda.CoreLib.Component
             return true;
         }
 
-        public async Task<List<(bool status, string message)>> CheckHealth(FaasClient client)
+        public async Task<List<(ComponentBase me, bool status, string message)>> CheckHealth(FaasClient client)
         {
             var healthTasks = this.Source.AllChildComponents().Select(c => c.HealthCheck(client)).ToList();
             var result = (await Task.WhenAll(healthTasks)).ToList();
@@ -49,6 +49,22 @@ namespace BudgetLambda.CoreLib.Component
         {
             var starting = this.Source;
             starting.ConfigureKey("");
+        }
+
+        public async Task PurgePipeline(FaasClient client)
+        {
+            var deletionTasks = this.ChildComponents.Select(c => 
+            {
+                return client.FunctionsDELETEAsync(new DeleteFunctionRequest 
+                {
+                    FunctionName = c.ServiceName,
+                });
+            });
+            try
+            {
+                await Task.WhenAll(deletionTasks);
+            }
+            catch (Exception) { }
         }
 
         public List<ComponentBase> FindOrphanedComponents()
