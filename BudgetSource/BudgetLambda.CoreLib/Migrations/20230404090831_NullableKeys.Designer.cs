@@ -3,6 +3,7 @@ using System;
 using BudgetLambda.CoreLib.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BudgetLambda.CoreLib.Migrations
 {
     [DbContext(typeof(BudgetContext))]
-    partial class BudgetContextModelSnapshot : ModelSnapshot
+    [Migration("20230404090831_NullableKeys")]
+    partial class NullableKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,20 +153,6 @@ namespace BudgetLambda.CoreLib.Migrations
                         .HasColumnType("text");
 
                     b.HasDiscriminator().HasValue("CSharpLambdaMap");
-                });
-
-            modelBuilder.Entity("BudgetLambda.CoreLib.Component.Sink.StdoutSink", b =>
-                {
-                    b.HasBaseType("BudgetLambda.CoreLib.Component.ComponentBase");
-
-                    b.HasDiscriminator().HasValue("StdoutSink");
-                });
-
-            modelBuilder.Entity("BudgetLambda.CoreLib.Component.Source.HttpSource", b =>
-                {
-                    b.HasBaseType("BudgetLambda.CoreLib.Component.ComponentBase");
-
-                    b.HasDiscriminator().HasValue("HttpSource");
                 });
 
             modelBuilder.Entity("BudgetLambda.CoreLib.Component.Source.RabbitMQSource", b =>

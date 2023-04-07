@@ -1,6 +1,8 @@
 ﻿@using BudgetLambda.CoreLib.Component;
 @using BudgetLambda.CoreLib.Component.Map;
+@using BudgetLambda.CoreLib.Database;
 @inject BudgetWorkloadScheduler scheduler
+@inject BudgetContext database
 
 @page "/controlpanel"
 
@@ -8,3 +10,4 @@
 
 
 <MudButton Variant="Variant.Filled" OnClick="SampleWorkflow">Do Sample Workflow</MudButton>
+<MudButton Variant="Variant.Filled" OnClick="Testbed">Testbed</MudButton>

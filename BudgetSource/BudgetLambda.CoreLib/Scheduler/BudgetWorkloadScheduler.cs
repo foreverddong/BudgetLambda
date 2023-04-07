@@ -16,7 +16,6 @@ namespace BudgetLambda.CoreLib.Scheduler
         private readonly IConfiguration configuration;
         private readonly FaasClient client;
         private PipelinePackage package;
-        private string exchangeName => $"ex-{package.PackageID.ShortID()}-{package.ExchangeName}";
 
 
         public BudgetWorkloadScheduler(IConfiguration conf, FaasClient _client)
@@ -45,17 +44,19 @@ namespace BudgetLambda.CoreLib.Scheduler
                 using var connection = factory.CreateConnection();
                 using var channel = connection.CreateModel();
 
-                channel.ExchangeDeclare(this.exchangeName, ExchangeType.Topic, durable: true);
+                channel.ExchangeDeclare(this.package.ExchangeName, ExchangeType.Topic, durable: true);
             });
         }
 
-        public async Task SchedulePackage(string workdir)
+        public async Task SchedulePackage(string workdir, Action<int> increaseCount)
         {
             package.ConfigurePackage();
-            var allcomponents = package.Source.AllChildComponents;
+            var allcomponents = package.Source.AllChildComponents();
+            int increment = 100 / allcomponents.Count;
             foreach (var c in allcomponents) 
             {
                 await this.ScheduleComponent(workdir, c);
+                increaseCount(increment);
             }
         }
 
@@ -67,7 +68,7 @@ namespace BudgetLambda.CoreLib.Scheduler
             }
             var package = await component.CreateWorkingPackage(workdir, configuration);
             await component.BuildImage(package, configuration);
-            var manifest = component.GenerateDeploymentManifest(this.exchangeName, configuration);
+            var manifest = component.GenerateDeploymentManifest(this.package.ExchangeName, configuration);
             await client.FunctionsPOSTAsync(manifest);
             Directory.Delete(workdir, true);
 

@@ -15,6 +15,8 @@ namespace BudgetLambda.CoreLib.Component.Sink
 
         public override ComponentType Type => ComponentType.Sink;
 
+        public override string? ServiceName => $"sink-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower();
+
         public override Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             return Task.FromResult((MemoryStream)null);
@@ -29,7 +31,7 @@ namespace BudgetLambda.CoreLib.Component.Sink
         {
             var res = new FunctionDefinition
             {
-                Service = $"sink-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower(),
+                Service = this.ServiceName,
                 Image = this.ImageTag,
                 Network = "deprecated",
                 ReadOnlyRootFilesystem = true,

@@ -4,6 +4,7 @@ using BudgetLambda.CoreLib.Component.Map;
 using BudgetLambda.CoreLib.Component.Sink;
 using BudgetLambda.CoreLib.Component.Source;
 using BudgetLambda.CoreLib.Utility.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetLambda.Server.Pages
 {
@@ -112,7 +113,17 @@ namespace BudgetLambda.Server.Pages
             };
             scheduler.LoadPackage(package);
             await scheduler.ConfigureMQ();
-            await scheduler.SchedulePackage($"{Path.GetTempPath}budget-{package.PackageName}-{Guid.NewGuid().ShortID()}/");
+            await scheduler.SchedulePackage($"{Path.GetTempPath}budget-{package.PackageName}-{Guid.NewGuid().ShortID()}/",(a) => { });
+        }
+
+        public async Task Testbed()
+        {
+            await database.CSharpLambdaMaps.LoadAsync();
+            await database.StdoutSinks.LoadAsync();
+            await database.HttpSources.LoadAsync();
+            var package = await database.PipelinePackages
+                .Include(p => p.Source)
+                .FirstAsync(p => p.PackageName == "CompleteSamplePackage");
         }
     }
 }

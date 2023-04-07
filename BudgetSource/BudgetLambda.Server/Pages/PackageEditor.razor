@@ -1,9 +1,18 @@
 ﻿@page "/packageeditor/{packageid:guid?}"
 @using BudgetLambda.CoreLib.Component
 @using BudgetLambda.CoreLib.Database
+@using BudgetLambda.CoreLib.Utility.Faas
+@using BudgetLambda.CoreLib.Scheduler
 @inject BudgetContext database
 @inject NavigationManager navigation
+@inject FaasClient client
+@inject BudgetWorkloadScheduler scheduler
 
+<MudOverlay @bind-Visible="processing" DarkBackground="true" AutoClose="false">
+    <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+    <MudProgressCircular Color="Color.Info" Size="Size.Large" Value="@process" />
+    <MudProgressLinear Color="Color.Info" Size="Size.Medium" Value="@process" Class="my-7" />
+</MudOverlay>
 
 <MudContainer>
     <MudGrid>
@@ -21,10 +30,13 @@
             <MudPaper Width="300px">
                 <MudList Clickable="true">
                     <MudListSubheader>
-
                         @if (creation)
                         {
                             <MudAlert Severity="Severity.Warning">New Pipeline</MudAlert>
+                        }
+                        else if (processing)
+                        {
+                            <MudAlert Severity="Severity.Info" Variant="Variant.Filled">Checking...</MudAlert>
                         }
                         else if (healthy)
                         {
@@ -38,8 +50,17 @@
                     <MudListItem Text="Manage Components" OnClick="OnClickManageComponent"></MudListItem>
                     <MudListItem Text="Manage Schemas"></MudListItem>
                     <MudListItem Text="@saveText" OnClick="SavePackage"></MudListItem>
+                    <MudListItem Text="Bring Package Offline" OnClick="PurgePipeline"></MudListItem>
+                    @if (!creating)
+                    {
+                        <MudListItem Text="Redeploy Pipeline" OnClick="RedeployPipeline"></MudListItem>
+                    }
+                    
                 </MudList>
             </MudPaper>
+        </MudItem>
+        <MudItem md="9">
+            <MermaidDiagram Definition="@mermaidDefinition"></MermaidDiagram>
         </MudItem>
     </MudGrid>
 </MudContainer>

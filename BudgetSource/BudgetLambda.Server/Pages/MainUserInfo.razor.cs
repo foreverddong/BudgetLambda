@@ -30,6 +30,14 @@ namespace BudgetLambda.Server.Pages
             navigation.NavigateTo("/packageeditor", true);
         }
 
+        private async Task CreateSamplePackage()
+        {
+            var pkg = await sample.BuildCompletePackage(User.Identity.Name, "CompleteSamplePackage");
+            database.PipelinePackages.Add(pkg);
+            database.SaveChanges();
+            navigation.NavigateTo($"/", true);
+        }
+
         private void RowClicked(TableRowClickEventArgs<PipelinePackage> args)
         {
             var targetid = args.Item.PackageID;

@@ -1,5 +1,6 @@
 ﻿
 using BudgetLambda.CoreLib.Utility.Extensions;
+using BudgetLambda.CoreLib.Utility.Faas;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,7 +22,7 @@ namespace BudgetLambda.CoreLib.Component
 
         public virtual List<ComponentBase>? ChildComponents { get; set; }
 
-        public string ExchangeName => $"{PackageID.ShortID()}-{PackageName}";
+        public string ExchangeName => $"ex-{PackageID.ShortID()}-{PackageName}";
 
         public bool Validate()
         {
@@ -37,11 +38,12 @@ namespace BudgetLambda.CoreLib.Component
             return true;
         }
 
-        public async Task<bool> CheckHealth()
+        public async Task<List<(ComponentBase me, bool status, string message)>> CheckHealth(FaasClient client)
         {
-//#warning TODO
-            // Check the health of the entire pipeline.
-            return true;
+            var healthTasks = this.Source.AllChildComponents().Select(c => c.HealthCheck(client)).ToList();
+            var result = (await Task.WhenAll(healthTasks)).ToList();
+            return result;
+            
         }
         public void ConfigurePackage()
         {
@@ -49,9 +51,25 @@ namespace BudgetLambda.CoreLib.Component
             starting.ConfigureKey("");
         }
 
+        public async Task PurgePipeline(FaasClient client)
+        {
+            var deletionTasks = this.ChildComponents.Select(c => 
+            {
+                return client.FunctionsDELETEAsync(new DeleteFunctionRequest 
+                {
+                    FunctionName = c.ServiceName,
+                });
+            });
+            try
+            {
+                await Task.WhenAll(deletionTasks);
+            }
+            catch (Exception) { }
+        }
+
         public List<ComponentBase> FindOrphanedComponents()
         {
-            return this.ChildComponents.Except(this.Source.AllChildComponents).ToList();
+            return this.ChildComponents.Except(this.Source.AllChildComponents()).ToList();
         }
     }
 }

@@ -14,6 +14,8 @@ namespace BudgetLambda.CoreLib.Component.Source
 
         public override ComponentType Type => throw new NotImplementedException();
 
+        public override string? ServiceName => throw new NotImplementedException();
+
         public override Task<bool> BuildImage(MemoryStream tarball, IConfiguration configuration)
         {
             throw new NotImplementedException();
