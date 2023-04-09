@@ -63,6 +63,8 @@ namespace BudgetLambda.Server.Pages
         private void OnClickManageComponent()
         {
             navigation.NavigateTo($"/packageeditor/{this.package.PackageID}/manage-component");
+        }
+
         private async Task<string> GenerateDiagram()
         {
             var builder = new StringBuilder();

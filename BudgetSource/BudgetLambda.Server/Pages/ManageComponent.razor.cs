@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor;
 using System.Security.Claims;
 using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
 
@@ -27,6 +28,16 @@ namespace BudgetLambda.Server.Pages
             this.components = this.package.ChildComponents;
         }
 
+        private void RowClicked(TableRowClickEventArgs<ComponentBase> args)
+        {
+            var componentid = args.Item.ComponentID;
 
+            navigation.NavigateTo($"/packageeditor/{this.package.PackageID}/manage-component/edit/{componentid}", true);
+        }
+
+        private void CreateClicked()
+        {
+            navigation.NavigateTo($"/packageeditor/{this.package.PackageID}/manage-component/edit", true);
+        }
     }
 }
