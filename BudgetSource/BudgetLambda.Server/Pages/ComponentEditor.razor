@@ -1,0 +1,47 @@
+﻿@page "/packageeditor/{packageid:guid}/manage-component/edit/{componentid:guid?}"
+@using BudgetLambda.CoreLib.Component
+@using BudgetLambda.CoreLib.Database
+@inject BudgetContext database
+@inject NavigationManager navigation
+@using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
+@using BlazorMonaco
+@using BlazorMonaco.Editor
+
+<MudContainer>
+    <MudGrid>
+        <MudItem md="12">
+            <MudGrid>
+                <MudItem md="6">
+                    <MudField Label="Package ID" Variant="Variant.Filled">@package.PackageID</MudField>
+                </MudItem>
+                <MudItem md="6">
+                    <MudField Label="Package Name" Variant="Variant.Filled">@package.PackageName</MudField>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+    <MudText Typo="Typo.h6">Component</MudText>
+    <MudForm @ref="form">
+        <MudTextField Label="Component id" @bind-Value="componentid" Disabled="true"></MudTextField>
+        <MudTextField Label="Component name" @bind-Value="componentName" Required="true" RequiredError="Component Name is required!"></MudTextField>
+        <div class="d-flex">
+            <MudRadioGroup T="ComponentType" Required="true" @bind-SelectedOption="@componentType" RequiredError="Component type is required!">
+                <MudRadio Option="@(ComponentType.Source)">HttpSource</MudRadio>
+                <MudRadio Option="@(ComponentType.Map)" onselect="">CSharpLambdaMap</MudRadio>
+                <MudRadio Option="@(ComponentType.Sink)">StdoutSink</MudRadio>
+            </MudRadioGroup>
+        </div>
+        <MudSelect T="ComponentBase" Label="Child components">
+            @foreach (var orphanComponent in orphanComponents)
+            {
+                <MudSelectItem T="ComponentBase">@orphanComponent.ComponentName</MudSelectItem>
+            }
+        </MudSelect>
+        @if (selectedMap)
+        {
+            <StandaloneCodeEditor Id="1" />
+        }
+
+    </MudForm>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnSubmit">Submit</MudButton>
+</MudContainer>
