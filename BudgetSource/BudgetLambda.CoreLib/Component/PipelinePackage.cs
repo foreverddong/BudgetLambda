@@ -67,9 +67,6 @@ namespace BudgetLambda.CoreLib.Component
             catch (Exception) { }
         }
 
-        public List<ComponentBase> FindOrphanedComponents()
-        {
-            return this.ChildComponents.Except(this.Source.AllChildComponents()).ToList();
-        }
+        public List<ComponentBase> FindOrphanedComponents() => this.ChildComponents.Except(this.Source.AllChildComponents()).ToList();
     }
 }

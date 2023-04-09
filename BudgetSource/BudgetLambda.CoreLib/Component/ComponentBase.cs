@@ -24,10 +24,7 @@ namespace BudgetLambda.CoreLib.Component
         public virtual List<ComponentBase> Next { get; set; } = new();
 
         public virtual string ImageTag => $"registry.donglinxu.com/budgetuser/{this.ComponentID.ShortID()}-{this.ComponentName.ToLower()}:latest";
-        public List<ComponentBase> AllChildComponents() 
-        { 
-            return this.Next.SelectMany(c => c.AllChildComponents()).Append(this).ToList();
-        } 
+        public List<ComponentBase> AllChildComponents() => this.Next.SelectMany(c => c.AllChildComponents()).Append(this).ToList();
 
         public abstract ComponentType Type { get; }
 
