@@ -38,15 +38,7 @@ namespace BudgetLambda.CoreLib.Component
             return true;
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         public async Task<List<(ComponentBase me, bool status, string message)>> CheckHealth(FaasClient client)
-=======
-        public async Task<List<(bool status, string message)>> CheckHealth(FaasClient client)
->>>>>>> 6b65ae9 (current status- cannot query base type)
-=======
-        public async Task<List<(ComponentBase me, bool status, string message)>> CheckHealth(FaasClient client)
->>>>>>> 50c3597 (added package deployment)
         {
             var healthTasks = this.Source.AllChildComponents().Select(c => c.HealthCheck(client)).ToList();
             var result = (await Task.WhenAll(healthTasks)).ToList();

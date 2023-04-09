@@ -125,15 +125,5 @@ namespace BudgetLambda.Server.Pages
                 .Include(p => p.Source)
                 .FirstAsync(p => p.PackageName == "CompleteSamplePackage");
         }
-
-        public async Task Testbed()
-        {
-            await database.CSharpLambdaMaps.LoadAsync();
-            await database.StdoutSinks.LoadAsync();
-            await database.HttpSources.LoadAsync();
-            var package = await database.PipelinePackages
-                .Include(p => p.Source)
-                .FirstAsync(p => p.PackageName == "CompleteSamplePackage");
-        }
     }
 }
