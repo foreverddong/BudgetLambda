@@ -48,25 +48,21 @@
                         }
                     </MudListSubheader>
                     <MudListItem Text="Manage Components" OnClick="OnClickManageComponent"></MudListItem>
-                    <MudListItem Text="Manage Schemas"></MudListItem>
+                    <MudListItem Text="Manage Schemas" OnClick="NavigateToSchemas"></MudListItem>
                     <MudListItem Text="@saveText" OnClick="SavePackage"></MudListItem>
                     <MudListItem Text="Bring Package Offline" OnClick="PurgePipeline"></MudListItem>
                     @if (!creating)
                     {
                         <MudListItem Text="Redeploy Pipeline" OnClick="RedeployPipeline"></MudListItem>
                     }
-                    
+
                 </MudList>
             </MudPaper>
         </MudItem>
         <MudItem md="9">
             <MermaidDiagram Definition="@mermaidDefinition"></MermaidDiagram>
         </MudItem>
-                    <MudListItem Text="Manage Schemas" OnClick="NavigateToSchemas"></MudListItem>
-                    <MudListItem Text="@saveText" OnClick="SavePackage"></MudListItem>
-                </MudList>
-            </MudPaper>
-        </MudItem>
+
 
     </MudGrid>
 </MudContainer>
