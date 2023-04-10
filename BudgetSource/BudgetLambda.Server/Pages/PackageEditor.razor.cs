@@ -96,6 +96,7 @@ namespace BudgetLambda.Server.Pages
                 this.package.ChildComponents.SelectMany(c => c.Next.Select(sub => $"{c.ComponentID} --> {sub.ComponentID}")).Aggregate(String.Empty, (a, b) => $"{a}\n{b}");
             builder.AppendLine(mermaidConnections);
             return builder.ToString();
+        }
 
         public void NavigateToSchemas()
         {
