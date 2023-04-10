@@ -7,6 +7,7 @@
 @inject NavigationManager navigation
 @inject FaasClient client
 @inject BudgetWorkloadScheduler scheduler
+@inject IJSRuntime interop
 
 <MudOverlay @bind-Visible="processing" DarkBackground="true" AutoClose="false">
     <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />

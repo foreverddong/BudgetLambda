@@ -3,6 +3,7 @@ using BudgetLambda.CoreLib.Utility.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 using System.Security.Claims;
 using System.Text;
 using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
@@ -30,6 +31,7 @@ namespace BudgetLambda.Server.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            //await interop.InvokeVoidAsync("undef");
             this.User = (await authenticationState).User;
             if (packageid is null)
             {

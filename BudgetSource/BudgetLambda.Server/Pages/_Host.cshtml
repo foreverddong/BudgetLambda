@@ -16,7 +16,7 @@
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 <body>
-    <component type="typeof(App)" render-mode="ServerPrerendered" />
+    <component type="typeof(App)" render-mode="Server" />
 
     <div id="blazor-error-ui">
         <environment include="Staging,Production">
@@ -34,5 +34,17 @@
     <script src="_content/BlazorMonaco/jsInterop.js"></script>
     <script src="_content/BlazorMonaco/lib/monaco-editor/min/vs/loader.js"></script>
     <script src="_content/BlazorMonaco/lib/monaco-editor/min/vs/editor/editor.main.js"></script>
+    <script>
+        undef = function() {
+            this.nocollidedefine = this.define;
+            this.define = undefined;
+            return;
+        }
+
+        redef = function() {
+            this.define = this.nocollidedefine;
+            return;
+        }
+    </script>
 </body>
 </html>
