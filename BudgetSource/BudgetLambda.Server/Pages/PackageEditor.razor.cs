@@ -80,7 +80,6 @@ namespace BudgetLambda.Server.Pages
             this.creating = false;
         }
 
-<<<<<<< HEAD
         private void OnClickManageComponent()
         {
             navigation.NavigateTo($"/packageeditor/{this.package.PackageID}/manage-component");
@@ -97,13 +96,10 @@ namespace BudgetLambda.Server.Pages
                 this.package.ChildComponents.SelectMany(c => c.Next.Select(sub => $"{c.ComponentID} --> {sub.ComponentID}")).Aggregate(String.Empty, (a, b) => $"{a}\n{b}");
             builder.AppendLine(mermaidConnections);
             return builder.ToString();
-=======
+
         public void NavigateToSchemas()
         {
             navigation.NavigateTo($"/schemaeditor/{this.package.PackageID}/", true);
-
-
->>>>>>> ab93b6e (editing razor.cs)
         }
     }
 }
