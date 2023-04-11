@@ -1,13 +1,13 @@
 ﻿@inject BudgetLambda.CoreLib.Database.BudgetContext database;
 
 <MudGrid>
-    <MudItem md="4">
+    <MudItem md="3">
         <MudPaper Width="300px">
             <MudList Clickable="false">
                 <MudListSubheader>
                     <MudGrid>
                         <MudItem md="2">
-                            <MudMenu FullWidth="true" Icon="@Icons.Material.Filled.Add">
+                            <MudMenu FullWidth="false" Icon="@Icons.Material.Filled.Add">
                                 <ChildContent>
                                     @foreach (var cr in this.CreationCallbacks)
                                     {
@@ -30,7 +30,8 @@
                                 <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => this.LoadComponent(c)">@c.ComponentName</MudButton>
                             </MudItem>
                             <MudItem md="2">
-                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small"
+                                    OnClick="async() => await this.RemoveComponent(c)"/>
                             </MudItem>
                         </MudGrid>
 
@@ -39,11 +40,11 @@
             </MudList>
         </MudPaper>
     </MudItem>
-    <MudItem md="8">
+    <MudItem md="9">
         @if (this.SelectedComponent is not null)
         {
             <MudContainer>
-                <ComponentEditor Component="this.SelectedComponent" />
+                <ComponentEditor @ref="editor" Component="this.SelectedComponent" Package="this.Package" />
             </MudContainer>
         }
     </MudItem>
