@@ -11,6 +11,7 @@ using BudgetLambda.CoreLib.Utility.Faas;
 
 namespace BudgetLambda.CoreLib.Component.Source
 {
+    [BudgetComponent(ComponentType.Source, "Source - Http")]
     public class HttpSource : ComponentBase
     {
 

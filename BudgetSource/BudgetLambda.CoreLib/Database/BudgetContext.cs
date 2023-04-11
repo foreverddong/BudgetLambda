@@ -21,7 +21,6 @@ namespace BudgetLambda.CoreLib.Database
         public DbSet<CSharpLambdaMap> CSharpLambdaMaps { get; set; }
         public DbSet<StdoutSink> StdoutSinks { get; set; }
         public DbSet<HttpSource> HttpSources { get; set; }
-        public DbSet<RabbitMQSource> RabbitMQSources { get; set; }
         public DbSet<PropertyDefinition> PropertyDefinitions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

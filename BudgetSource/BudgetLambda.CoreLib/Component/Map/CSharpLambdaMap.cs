@@ -12,6 +12,7 @@ using BudgetLambda.CoreLib.Utility.Faas;
 
 namespace BudgetLambda.CoreLib.Component.Map
 {
+    [BudgetComponent(ComponentType.Map,"Lambda Map - C#", Language.CSHARP)]
     public class CSharpLambdaMap : ComponentBase
     {
         public Language Lang => Language.CSHARP;

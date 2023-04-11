@@ -1,0 +1,50 @@
+﻿@inject BudgetLambda.CoreLib.Database.BudgetContext database;
+
+<MudGrid>
+    <MudItem md="4">
+        <MudPaper Width="300px">
+            <MudList Clickable="false">
+                <MudListSubheader>
+                    <MudGrid>
+                        <MudItem md="2">
+                            <MudMenu FullWidth="true" Icon="@Icons.Material.Filled.Add">
+                                <ChildContent>
+                                    @foreach (var cr in this.CreationCallbacks)
+                                    {
+                                        <MudMenuItem OnClick="async () => await cr.callback()">@cr.id</MudMenuItem>
+                                    }
+                                </ChildContent>
+                            </MudMenu>
+                        </MudItem>
+                        <MudItem md="10">
+                            <MudText Typo="Typo.h4">Components</MudText>
+                        </MudItem>
+                    </MudGrid>
+
+                </MudListSubheader>
+                @foreach (var c in Package.ChildComponents)
+                {
+                    <MudListItem>
+                        <MudGrid>
+                            <MudItem md="10">
+                                <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => this.LoadComponent(c)">@c.ComponentName</MudButton>
+                            </MudItem>
+                            <MudItem md="2">
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" />
+                            </MudItem>
+                        </MudGrid>
+
+                    </MudListItem>
+                }
+            </MudList>
+        </MudPaper>
+    </MudItem>
+    <MudItem md="8">
+        @if (this.SelectedComponent is not null)
+        {
+            <MudContainer>
+                <ComponentEditor Component="this.SelectedComponent" />
+            </MudContainer>
+        }
+    </MudItem>
+</MudGrid>
