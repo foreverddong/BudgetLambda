@@ -3,6 +3,7 @@ using System;
 using BudgetLambda.CoreLib.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BudgetLambda.CoreLib.Migrations
 {
     [DbContext(typeof(BudgetContext))]
-    partial class BudgetContextModelSnapshot : ModelSnapshot
+    [Migration("20230411072101_ComponentAdd")]
+    partial class ComponentAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,13 +48,13 @@ namespace BudgetLambda.CoreLib.Migrations
                     b.Property<string>("InputKey")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("InputSchemaSchemaID")
+                    b.Property<Guid>("InputSchemaSchemaID")
                         .HasColumnType("uuid");
 
                     b.Property<string>("OutputKey")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("OutputSchemaSchemaID")
+                    b.Property<Guid>("OutputSchemaSchemaID")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("PipelinePackagePackageID")
@@ -173,11 +176,15 @@ namespace BudgetLambda.CoreLib.Migrations
 
                     b.HasOne("BudgetLambda.CoreLib.Component.DataSchema", "InputSchema")
                         .WithMany()
-                        .HasForeignKey("InputSchemaSchemaID");
+                        .HasForeignKey("InputSchemaSchemaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BudgetLambda.CoreLib.Component.DataSchema", "OutputSchema")
                         .WithMany()
-                        .HasForeignKey("OutputSchemaSchemaID");
+                        .HasForeignKey("OutputSchemaSchemaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BudgetLambda.CoreLib.Component.PipelinePackage", null)
                         .WithMany("ChildComponents")

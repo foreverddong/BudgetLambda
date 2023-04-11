@@ -1,8 +1,43 @@
-﻿<MudGrid>
+﻿@using BudgetLambda.CoreLib.Component.Sink
+@using BudgetLambda.CoreLib.Component.Source
+@using BudgetLambda.CoreLib.Component.Map
+@using BudgetLambda.CoreLib.Component.Interfaces
+@inject IConfiguration conf
+@inject ILogger<ComponentEditor> logger
+
+<MudGrid>
     <MudItem md="6">
         <MudField Label="Component ID" Variant="Variant.Filled">@Component.ComponentID</MudField>
     </MudItem>
     <MudItem md="6">
         <MudTextField @bind-Value="Component.ComponentName" Label="Component Name" Variant="Variant.Outlined"></MudTextField>
     </MudItem>
+    <MudItem md="6">
+        <MudSelect T="DataSchema" Disabled="inputSchemaDisabled" Label="Input Schema" Variant="Variant.Outlined" @bind-Value="this.Component.InputSchema">
+            @foreach(var s in this.Package.Schamas)
+            {
+                <MudSelectItem Value="s">@s.ToString()</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem md="6">
+        <MudSelect T="DataSchema" Disabled="outputSchemaDisabled" Label="Output Schema" Variant="Variant.Outlined" @bind-Value="this.Component.OutputSchema">
+            @foreach (var s in this.Package.Schamas)
+            {
+                <MudSelectItem Value="s">@s.ToString()</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    @if (Component is HttpSource scr)
+    {
+        <MudItem md="12">
+            <MudField Label="Service Uri" Variant="Variant.Filled">@($"{conf.GetValue<string>("OpenFaas:GatewayAddr")}{scr.ServiceUri}")</MudField>
+        </MudItem>
+    }
+    @if (Component is ILambdaMap mcr)
+    {
+        <MudItem md="12">
+            <StandaloneCodeEditor @ref="editor" Id="lambda-editor" ConstructionOptions="CSharpEditorOptions" CssClass="lambda-editor-class" OnKeyDown="UpdateCodeValue" />
+        </MudItem>
+    }
 </MudGrid>

@@ -14,6 +14,8 @@ namespace BudgetLambda.CoreLib.Component
         public string? SchemaName { get; set; }
 
         public virtual List<PropertyDefinition> Mapping { get; set; } = new();
+
+        public override string ToString() => SchemaName;
     }
 
     public enum DataType
@@ -28,6 +30,8 @@ namespace BudgetLambda.CoreLib.Component
     {
         [Key]
         public Guid DefinitionID { get; set; } = Guid.NewGuid();
+
+        public bool IsList { get; set; } = false;
         public DataType Type { get; set; }
         public string Identifier { get; set; }
     }

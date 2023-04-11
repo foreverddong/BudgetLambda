@@ -15,13 +15,13 @@ namespace BudgetLambda.CoreLib.Component
     {
         [Key]
         public Guid ComponentID { get; set; } = Guid.NewGuid();
-        public string ComponentName { get; set; }
-        public virtual DataSchema InputSchema { get; set; }
-        public virtual DataSchema OutputSchema { get; set; }
+        public string? ComponentName { get; set; }
+        public virtual DataSchema? InputSchema { get; set; }
+        public virtual DataSchema? OutputSchema { get; set; }
         public string? InputKey { get; private set; }
         public string? OutputKey { get; private set; }
         public abstract string? ServiceName { get; }
-        public virtual List<ComponentBase> Next { get; set; } = new();
+        public virtual List<ComponentBase>? Next { get; set; } = new();
 
         public virtual string ImageTag => $"registry.donglinxu.com/budgetuser/{this.ComponentID.ShortID()}-{this.ComponentName.ToLower()}:latest";
         public List<ComponentBase> AllChildComponents() => this.Next.SelectMany(c => c.AllChildComponents()).Append(this).ToList();

@@ -1,4 +1,5 @@
-﻿using BudgetLambda.CoreLib.Utility.Extensions;
+﻿using BudgetLambda.CoreLib.Component.Interfaces;
+using BudgetLambda.CoreLib.Utility.Extensions;
 using BudgetLambda.CoreLib.Utility.Faas;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace BudgetLambda.CoreLib.Component.Sink
 {
     [BudgetComponent(ComponentType.Sink, "Sink - Stdout")]
-    public class StdoutSink : ComponentBase
+    public class StdoutSink : ComponentBase, ISink
     {
         public override string ImageTag => "registry-ui.donglinxu.com/budget/stdoutsink:latest";
 

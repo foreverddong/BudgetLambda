@@ -2,3 +2,24 @@
 @using BudgetLambda.CoreLib.Database
 @inject BudgetContext database
 
+<MudGrid>
+    <MudItem md="3">
+        <MudList Clickable="false">
+            <MudListSubheader>
+                <MudGrid>
+                    <MudItem md="2">
+                        <MudMenu FullWidth="false" Icon="@Icons.Material.Filled.Add">
+                            <ChildContent>
+
+                            </ChildContent>
+                        </MudMenu>
+                    </MudItem>
+                    <MudItem md="10">
+                        <MudText Typo="Typo.h4">Data Schemas</MudText>
+                    </MudItem>
+                </MudGrid>
+
+            </MudListSubheader>
+        </MudList>
+    </MudItem>
+</MudGrid>
