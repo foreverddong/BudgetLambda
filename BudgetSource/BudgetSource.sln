@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpFunction", "CSharpFun
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetLambda.Server", "BudgetLambda.Server\BudgetLambda.Server.csproj", "{808826FB-28C8-4C78-8678-0A62431616BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpSink", "CSharpSink\CSharpSink.csproj", "{12E6A07A-AAB6-4905-BEF3-CCEC4690E0BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpSink", "CSharpSink\CSharpSink.csproj", "{12E6A07A-AAB6-4905-BEF3-CCEC4690E0BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace BudgetLambda.CoreLib.Component.Sink
 {
+    [BudgetComponent(ComponentType.Sink, "Sink - Stdout")]
     public class StdoutSink : ComponentBase
     {
         public override string ImageTag => "registry-ui.donglinxu.com/budget/stdoutsink:latest";
