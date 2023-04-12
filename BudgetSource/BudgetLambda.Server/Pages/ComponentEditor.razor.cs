@@ -6,6 +6,7 @@ using BudgetLambda.CoreLib.Component.Interfaces;
 using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
 using BudgetLambda.CoreLib.Component;
 using MudBlazor;
+using System.Text.Json;
 
 namespace BudgetLambda.Server.Pages
 {
@@ -18,6 +19,9 @@ namespace BudgetLambda.Server.Pages
 
         private StandaloneCodeEditor? editor { get; set; }
         private MudDropContainer<ComponentBase>? dropContainer { get; set; }
+        private int currentReplicas { get; set; } = 0;
+        private int targetReplicas { get; set; } = 0;
+
 
         private bool inputSchemaDisabled => (Component is ISource);
         private bool outputSchemaDisabled => (Component is ISink);
@@ -60,6 +64,7 @@ namespace BudgetLambda.Server.Pages
             {
                 await editor.SetValue(c.Code);
             }
+            await this.ObtainCurrentRelicas();
             dropContainer.Refresh();
             StateHasChanged();
         }
@@ -95,6 +100,27 @@ namespace BudgetLambda.Server.Pages
                 }
             }
             await database.SaveChangesAsync();
+        }
+
+        private async Task ObtainCurrentRelicas()
+        {
+            var info = await client.FunctionGETAsync(this.Component.ServiceName);
+            var replicaCount = Convert.ToInt32(info.Replicas);
+            this.currentReplicas = replicaCount;
+        }
+
+        private async Task ScaleReplicas()
+        {
+            var count = this.targetReplicas;
+            using var stream = new MemoryStream();
+            JsonSerializer.Serialize(stream, new
+            {
+                service = this.Component.ServiceName,
+                replicas = count
+            });
+            stream.Seek(0, SeekOrigin.Begin);
+            await client.ScaleFunctionAsync(this.Component.ServiceName, stream );
+            await this.ObtainCurrentRelicas();
         }
 
         protected override async void OnAfterRender(bool firstRender)
