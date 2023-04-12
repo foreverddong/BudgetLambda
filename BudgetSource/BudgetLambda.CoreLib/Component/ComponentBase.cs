@@ -41,6 +41,15 @@ namespace BudgetLambda.CoreLib.Component
             }
         }
 
+        public virtual void DetachChildComponents()
+        {
+            foreach (var c in this.Next)
+            {
+                c.DetachChildComponents();
+            }
+            this.Next.Clear();
+        }
+
         public virtual async Task<(ComponentBase me, bool status, string message)> HealthCheck(FaasClient client)
         {
             var serviceName = this.ServiceName;

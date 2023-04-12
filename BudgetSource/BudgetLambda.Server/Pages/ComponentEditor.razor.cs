@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using BudgetLambda.CoreLib.Component.Interfaces;
 using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
 using BudgetLambda.CoreLib.Component;
+using MudBlazor;
 
 namespace BudgetLambda.Server.Pages
 {
@@ -16,9 +17,12 @@ namespace BudgetLambda.Server.Pages
         public PipelinePackage Package { get; set; }
 
         private StandaloneCodeEditor? editor { get; set; }
+        private MudDropContainer<ComponentBase>? dropContainer { get; set; }
 
         private bool inputSchemaDisabled => (Component is ISource);
         private bool outputSchemaDisabled => (Component is ISink);
+
+        private bool nextComponentDisabled => (Component is ISink) || (this.Package.FindOrphanedComponents().Contains(this.Component));
 
         private StandaloneEditorConstructionOptions CSharpEditorOptions(StandaloneCodeEditor editor)
         {
@@ -50,13 +54,48 @@ namespace BudgetLambda.Server.Pages
 
         public async Task ReloadPageAsync()
         {
+            //This is another one of those really stupid workarounds.
+            await Task.Delay(100);
             if (Component is ILambdaMap c)
             {
-                //This is another one of those really stupid workarounds.
-                await Task.Delay(200);
                 var model = await editor.GetModel();
                 await model.SetValue(c.Code);
             }
+            dropContainer.Refresh();
+            StateHasChanged();
+        }
+
+        private bool DropSelector(ComponentBase item, string dropid)
+        {
+            var reachableItems = this.Package.Source.AllChildComponents();
+            return dropid switch
+            {
+                "avaliable" => (!reachableItems.Contains(item) && this.Component != item),
+                "selected" => (this.Component.Next.Contains(item)),
+                _ => false,
+            };
+
+        }
+
+        private async Task ItemUpdated(MudItemDropInfo<ComponentBase> dropItem)
+        {
+            if (dropItem.DropzoneIdentifier == "selected")
+            {
+                if (!this.Component.Next.Contains(dropItem.Item))
+                {
+                    this.Component.Next.Add(dropItem.Item);
+                }
+
+            }
+            else if (dropItem.DropzoneIdentifier == "avaliable")
+            {
+                if (this.Component.Next.Contains(dropItem.Item))
+                {
+                    this.Component.Next.Remove(dropItem.Item);
+                    dropItem.Item.DetachChildComponents();
+                }
+            }
+            await database.SaveChangesAsync();
         }
 
         protected override async void OnAfterRender(bool firstRender)

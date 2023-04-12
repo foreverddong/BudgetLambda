@@ -1,4 +1,5 @@
 ﻿using BudgetLambda.CoreLib.Component;
+using BudgetLambda.CoreLib.Component.Interfaces;
 using BudgetLambda.CoreLib.Component.Map;
 using BudgetLambda.CoreLib.Component.Sink;
 using BudgetLambda.CoreLib.Component.Source;
@@ -28,6 +29,10 @@ namespace BudgetLambda.Server.Pages
         {
             T newComponent = new() { ComponentName = "New Component" };
             this.Package.ChildComponents.Add(newComponent);
+            if (newComponent is ISource)
+            {
+                this.Package.Source = newComponent;
+            }
             database.Components.Add(newComponent);
             await database.SaveChangesAsync();
             await this.LoadComponent(newComponent);
@@ -38,7 +43,6 @@ namespace BudgetLambda.Server.Pages
             this.SelectedComponent = component;
             if (editor is not null)
             {
-                editor.Component = component;
                 await editor.ReloadPageAsync();
             }
 

@@ -13,7 +13,7 @@ namespace BudgetLambda.CoreLib.Component
         public Guid SchemaID { get; set; } = Guid.NewGuid();
         public string? SchemaName { get; set; }
 
-        public virtual List<PropertyDefinition> Mapping { get; set; } = new();
+        public virtual List<PropertyDefinition>? Mapping { get; set; } = new();
 
         public override string ToString() => SchemaName;
 

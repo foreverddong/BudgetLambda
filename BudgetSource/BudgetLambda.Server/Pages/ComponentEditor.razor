@@ -2,8 +2,11 @@
 @using BudgetLambda.CoreLib.Component.Source
 @using BudgetLambda.CoreLib.Component.Map
 @using BudgetLambda.CoreLib.Component.Interfaces
+@using BudgetLambda.CoreLib.Database
+@using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase
 @inject IConfiguration conf
 @inject ILogger<ComponentEditor> logger
+@inject BudgetContext database
 
 <MudGrid>
     <MudItem md="6">
@@ -12,15 +15,15 @@
     <MudItem md="6">
         <MudTextField @bind-Value="Component.ComponentName" Label="Component Name" Variant="Variant.Outlined"></MudTextField>
     </MudItem>
-    <MudItem md="6">
+    <MudItem md="3">
         <MudSelect T="DataSchema" Disabled="inputSchemaDisabled" Label="Input Schema" Variant="Variant.Outlined" @bind-Value="this.Component.InputSchema">
-            @foreach(var s in this.Package.Schamas)
+            @foreach (var s in this.Package.Schamas)
             {
                 <MudSelectItem Value="s">@s.ToString()</MudSelectItem>
             }
         </MudSelect>
     </MudItem>
-    <MudItem md="6">
+    <MudItem md="3">
         <MudSelect T="DataSchema" Disabled="outputSchemaDisabled" Label="Output Schema" Variant="Variant.Outlined" @bind-Value="this.Component.OutputSchema">
             @foreach (var s in this.Package.Schamas)
             {
@@ -28,11 +31,45 @@
             }
         </MudSelect>
     </MudItem>
+    @if (this.nextComponentDisabled)
+    {
+        <MudAlert Severity="Severity.Warning">This Component is either 1. Detached or 2. a Sink, in which cases Next components cannot be added.</MudAlert>
+    }
+    else
+    {
+        <MudItem md="12">
+            <MudDropContainer @ref="dropContainer" T="ComponentBase" Items="this.Package.ChildComponents" ItemsSelector="DropSelector" ItemDropped="ItemUpdated">
+                <ChildContent>
+                    <MudGrid>
+                        <MudItem md="6">
+                            <MudPaper Class="ma-4 flex-grow-1">
+                                <MudList Clickable="true" Class="d-flex flex-column mud-height-full">
+                                    <MudListSubheader>Avaliable Components</MudListSubheader>
+                                    <MudDropZone T="ComponentBase" Identifier="avaliable" Class="flex-grow-1" Style="min-height:400px;" />
+                                </MudList>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem md="6">
+                            <MudPaper Class="ma-4 flex-grow-1">
+                                <MudList Clickable="true" Class="d-flex flex-column mud-height-full">
+                                    <MudListSubheader>Next Components in Pipeline</MudListSubheader>
+                                    <MudDropZone T="ComponentBase" Identifier="selected" Class="flex-grow-1" Style="min-height:400px;" />
+                                </MudList>
+                            </MudPaper>
+                        </MudItem>
+                    </MudGrid>
+                </ChildContent>
+                <ItemRenderer>
+                    <MudListItem Text="@context.ComponentName" />
+                </ItemRenderer>
+            </MudDropContainer>
+        </MudItem>
+    }
     @if (Component is HttpSource scr)
     {
         <MudItem md="12">
             <MudField Label="Service Uri" Variant="Variant.Filled">@($"{conf.GetValue<string>("OpenFaas:GatewayAddr")}{scr.ServiceUri}")</MudField>
-        </MudItem>
+            </MudItem>
     }
     @if (Component is ILambdaMap mcr)
     {

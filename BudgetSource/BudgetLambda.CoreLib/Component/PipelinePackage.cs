@@ -18,9 +18,9 @@ namespace BudgetLambda.CoreLib.Component
         public string PackageName { get; set; }
         public virtual ComponentBase? Source { get; set; }
         //should be a list of schemas
-        public virtual List<DataSchema> Schamas { get; set; } = new(); 
+        public virtual List<DataSchema>? Schamas { get; set; } = new();
 
-        public virtual List<ComponentBase>? ChildComponents { get; set; }
+        public virtual List<ComponentBase>? ChildComponents { get; set; } = new();
 
         public string ExchangeName => $"ex-{PackageID.ShortID()}-{PackageName}";
 
@@ -40,6 +40,10 @@ namespace BudgetLambda.CoreLib.Component
 
         public async Task<List<(ComponentBase me, bool status, string message)>> CheckHealth(FaasClient client)
         {
+            if (this.Source is null)
+            {
+                return new();
+            }
             var healthTasks = this.Source.AllChildComponents().Select(c => c.HealthCheck(client)).ToList();
             var result = (await Task.WhenAll(healthTasks)).ToList();
             return result;
