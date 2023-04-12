@@ -125,7 +125,7 @@ namespace CSharpFunction
 """;
             var builder = new StringBuilder();
             builder.AppendLine(prefix);
-            var decl = this.InputSchema.Mapping.Select(s => $"public {ConvertNativeType(s.Type)} {s.Identifier} {{get; set;}}").Aggregate((a,b) => $"{a}\n{b}");
+            var decl = this.InputSchema.Mapping.Select(s => $"public {ConvertNativeType(s)} {s.Identifier} {{get; set;}}").Aggregate((a,b) => $"{a}\n{b}");
             builder.AppendLine(decl);
             builder.AppendLine(postfix);
             return builder.ToString();
