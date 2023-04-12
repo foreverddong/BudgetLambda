@@ -8,6 +8,9 @@ using static MudBlazor.CategoryTypes;
 
 namespace BudgetLambda.Server.Pages
 {
+    /// <summary>
+    /// UI Component to display all packages owned by a user, as well as providing navigation to these packages.
+    /// </summary>
     public partial class MainUserInfo
     {
         [CascadingParameter]
@@ -15,6 +18,7 @@ namespace BudgetLambda.Server.Pages
 
         private ClaimsPrincipal User { get; set; }
         private List<PipelinePackage> pipelinePackages { get; set; } = new();
+/// <inheritdoc/>
 
         protected override async Task OnInitializedAsync()
         {

@@ -12,29 +12,35 @@ using BudgetLambda.CoreLib.Component.Interfaces;
 
 namespace BudgetLambda.CoreLib.Component.Source
 {
+    /// <summary>
+    /// Represents a source that receives messages from an HTTP endpoint.
+    /// </summary>
     [BudgetComponent(ComponentType.Source, "Source - Http")]
     public class HttpSource : ComponentBase, ISource
     {
-
+        /// <inheritdoc />
         public override string ImageTag => "registry-ui.donglinxu.com/budget/httpsource:latest";
 
+        /// <inheritdoc />
         public override ComponentType Type => ComponentType.Source;
-
+        /// <inheritdoc />
         public override string? ServiceName => $"source-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower();
-
+        /// <summary>
+        /// The service uri that receives message in relation to the base address to the Faas Gateway.
+        /// </summary>
         public string ServiceUri => $"/function/{ServiceName}/msg";
 
-
+        /// <inheritdoc />
         public override Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             return Task.FromResult((MemoryStream)null);
         }
-
+        /// <inheritdoc />
         public override Task<bool> BuildImage(MemoryStream tarball, IConfiguration configuration)
         {
             return Task.FromResult(true);
         }
-
+        /// <inheritdoc />
         public override FunctionDefinition GenerateDeploymentManifest(string masterExchange, IConfiguration configuration)
         {
             var res = new FunctionDefinition

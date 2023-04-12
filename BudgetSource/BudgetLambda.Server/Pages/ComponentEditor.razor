@@ -3,10 +3,12 @@
 @using BudgetLambda.CoreLib.Component.Map
 @using BudgetLambda.CoreLib.Component.Interfaces
 @using BudgetLambda.CoreLib.Database
+@using BudgetLambda.CoreLib.Utility.Faas
 @using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase
 @inject IConfiguration conf
 @inject ILogger<ComponentEditor> logger
 @inject BudgetContext database
+@inject FaasClient client
 
 <MudGrid>
     <MudItem md="6">
@@ -30,6 +32,15 @@
                 <MudSelectItem Value="s">@s.ToString()</MudSelectItem>
             }
         </MudSelect>
+    </MudItem>
+    <MudItem md="2">
+        <MudField Label="Current Replicas" Variant="Variant.Text">@currentReplicas</MudField>
+    </MudItem>
+    <MudItem md="2">
+        <MudNumericField @bind-Value="targetReplicas" Label="Target Replicas" Variant="Variant.Text"></MudNumericField>
+    </MudItem>
+    <MudItem md="2">
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="ScaleReplicas">Scale</MudButton>
     </MudItem>
     @if (this.nextComponentDisabled)
     {

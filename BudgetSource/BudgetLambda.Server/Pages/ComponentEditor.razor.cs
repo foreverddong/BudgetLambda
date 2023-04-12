@@ -6,6 +6,7 @@ using BudgetLambda.CoreLib.Component.Interfaces;
 using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
 using BudgetLambda.CoreLib.Component;
 using MudBlazor;
+using System.Text.Json;
 
 namespace BudgetLambda.Server.Pages
 {
@@ -18,6 +19,9 @@ namespace BudgetLambda.Server.Pages
 
         private StandaloneCodeEditor? editor { get; set; }
         private MudDropContainer<ComponentBase>? dropContainer { get; set; }
+        private int currentReplicas { get; set; } = 0;
+        private int targetReplicas { get; set; } = 0;
+
 
         private bool inputSchemaDisabled => (Component is ISource);
         private bool outputSchemaDisabled => (Component is ISink);
@@ -44,12 +48,12 @@ namespace BudgetLambda.Server.Pages
 
         private async Task UpdateCodeValue(KeyboardEvent e)
         {
-            var model = await editor.GetModel();
-            var code = await model.GetValue(EndOfLinePreference.TextDefined, true);
+            var code = await editor.GetValue();
             if (Component is ILambdaMap c)
             {
                 c.Code = code;
             }
+            await database.SaveChangesAsync();
         }
 
         public async Task ReloadPageAsync()
@@ -58,9 +62,9 @@ namespace BudgetLambda.Server.Pages
             await Task.Delay(100);
             if (Component is ILambdaMap c)
             {
-                var model = await editor.GetModel();
-                await model.SetValue(c.Code);
+                await editor.SetValue(c.Code);
             }
+            await this.ObtainCurrentRelicas();
             dropContainer.Refresh();
             StateHasChanged();
         }
@@ -96,6 +100,27 @@ namespace BudgetLambda.Server.Pages
                 }
             }
             await database.SaveChangesAsync();
+        }
+
+        private async Task ObtainCurrentRelicas()
+        {
+            var info = await client.FunctionGETAsync(this.Component.ServiceName);
+            var replicaCount = Convert.ToInt32(info.Replicas);
+            this.currentReplicas = replicaCount;
+        }
+
+        private async Task ScaleReplicas()
+        {
+            var count = this.targetReplicas;
+            using var stream = new MemoryStream();
+            JsonSerializer.Serialize(stream, new
+            {
+                service = this.Component.ServiceName,
+                replicas = count
+            });
+            stream.Seek(0, SeekOrigin.Begin);
+            await client.ScaleFunctionAsync(this.Component.ServiceName, stream );
+            await this.ObtainCurrentRelicas();
         }
 
         protected override async void OnAfterRender(bool firstRender)

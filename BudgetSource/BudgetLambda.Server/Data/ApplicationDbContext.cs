@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BudgetLambda.Server.Data
 {
+#pragma warning disable CS1591
     public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

@@ -13,8 +13,14 @@ using MudBlazor.Services;
 
 namespace BudgetLambda.Server
 {
+    /// <summary>
+    /// Main Entry class.
+    /// </summary>
     public class Program
-    {
+    {    
+        /// <summary>
+        /// Main Entry point for the web server.
+        /// </summary>
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);

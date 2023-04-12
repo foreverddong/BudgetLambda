@@ -13,16 +13,25 @@ using BudgetLambda.CoreLib.Component.Interfaces;
 
 namespace BudgetLambda.CoreLib.Component.Map
 {
+    /// <summary>
+    /// The Lambda Map component in C# language.
+    /// </summary>
     [BudgetComponent(ComponentType.Map,"Lambda Map - C#", Language.CSHARP)]
     public class CSharpLambdaMap : ComponentBase, ILambdaMap
     {
+        /// <inheritdoc />
         public Language Lang => Language.CSHARP;
 
+        /// <inheritdoc />
         public string Code { get; set; }
 
+        /// <inheritdoc />
         public override ComponentType Type => ComponentType.Map;
+
+        /// <inheritdoc />
         public override string? ServiceName => $"func-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower();
 
+        /// <inheritdoc />
         public override async Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             //Download the dockerfile
@@ -66,6 +75,7 @@ namespace BudgetLambda.CoreLib.Component.Map
 
 
         }
+        /// <inheritdoc />
         public override async Task<bool> BuildImage(MemoryStream tarball, IConfiguration configuration)
         {
             var client = new DockerClientConfiguration(new Uri(configuration.GetValue<string>("Infrastructure:Docker:ServerUri"))).CreateClient();
@@ -85,6 +95,7 @@ namespace BudgetLambda.CoreLib.Component.Map
 
             return true;
         }
+        /// <inheritdoc />
         public override FunctionDefinition GenerateDeploymentManifest(string masterExchange, IConfiguration configuration)
         {
             var res = new FunctionDefinition
@@ -125,7 +136,7 @@ namespace CSharpFunction
 """;
             var builder = new StringBuilder();
             builder.AppendLine(prefix);
-            var decl = this.InputSchema.Mapping.Select(s => $"public {ConvertNativeType(s.Type)} {s.Identifier} {{get; set;}}").Aggregate((a,b) => $"{a}\n{b}");
+            var decl = this.InputSchema.Mapping.Select(s => $"public {ConvertNativeType(s)} {s.Identifier} {{get; set;}}").Aggregate((a,b) => $"{a}\n{b}");
             builder.AppendLine(decl);
             builder.AppendLine(postfix);
             return builder.ToString();
@@ -147,7 +158,7 @@ namespace CSharpFunction
 """;
             var builder = new StringBuilder();
             builder.AppendLine(prefix);
-            var decl = this.OutputSchema.Mapping.Select(s => $"public {ConvertNativeType(s.Type)} {s.Identifier} {{get; set;}}").Aggregate((a, b) => $"{a}\n{b}");
+            var decl = this.OutputSchema.Mapping.Select(s => $"public {ConvertNativeType(s)} {s.Identifier} {{get; set;}}").Aggregate((a, b) => $"{a}\n{b}");
             builder.AppendLine(decl);
             builder.AppendLine(postfix);
             return builder.ToString();
@@ -174,15 +185,19 @@ namespace CSharpFunction
             return builder.ToString();
         }
 
-        private string ConvertNativeType(DataType t)
+        private string ConvertNativeType(PropertyDefinition d)
         {
-            return t switch 
-            { 
+            var t = d.Type;
+            var typename =  t switch
+            {
                 DataType.Boolean => "bool",
                 DataType.String => "string",
                 DataType.Float => "double",
                 DataType.Integer => "int",
+                _ => throw new NotImplementedException(),
             };
+            var listed = $"List<{typename}>";
+            return d.IsList ? listed : typename;
         }
     }
 }

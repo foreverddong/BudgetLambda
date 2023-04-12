@@ -1,5 +1,6 @@
 namespace BudgetLambda.Server.Data
 {
+#pragma warning disable CS1591
     public class WeatherForecast
     {
         public DateOnly Date { get; set; }
