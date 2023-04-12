@@ -13,16 +13,25 @@ using BudgetLambda.CoreLib.Component.Interfaces;
 
 namespace BudgetLambda.CoreLib.Component.Map
 {
+    /// <summary>
+    /// The Lambda Map component in C# language.
+    /// </summary>
     [BudgetComponent(ComponentType.Map,"Lambda Map - C#", Language.CSHARP)]
     public class CSharpLambdaMap : ComponentBase, ILambdaMap
     {
+        /// <inheritdoc />
         public Language Lang => Language.CSHARP;
 
+        /// <inheritdoc />
         public string Code { get; set; }
 
+        /// <inheritdoc />
         public override ComponentType Type => ComponentType.Map;
+
+        /// <inheritdoc />
         public override string? ServiceName => $"func-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower();
 
+        /// <inheritdoc />
         public override async Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             //Download the dockerfile
@@ -66,6 +75,7 @@ namespace BudgetLambda.CoreLib.Component.Map
 
 
         }
+        /// <inheritdoc />
         public override async Task<bool> BuildImage(MemoryStream tarball, IConfiguration configuration)
         {
             var client = new DockerClientConfiguration(new Uri(configuration.GetValue<string>("Infrastructure:Docker:ServerUri"))).CreateClient();
@@ -85,6 +95,7 @@ namespace BudgetLambda.CoreLib.Component.Map
 
             return true;
         }
+        /// <inheritdoc />
         public override FunctionDefinition GenerateDeploymentManifest(string masterExchange, IConfiguration configuration)
         {
             var res = new FunctionDefinition

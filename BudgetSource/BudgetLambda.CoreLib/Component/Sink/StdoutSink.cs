@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace BudgetLambda.CoreLib.Component.Sink
 {
+
+    /// <summary>
+    /// Represents a sink component that simple prints all data it received into Stdout.
+    /// </summary>
     [BudgetComponent(ComponentType.Sink, "Sink - Stdout")]
     public class StdoutSink : ComponentBase, ISink
     {

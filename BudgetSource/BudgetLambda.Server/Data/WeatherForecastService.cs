@@ -1,5 +1,6 @@
 namespace BudgetLambda.Server.Data
 {
+#pragma warning disable CS1591
     public class WeatherForecastService
     {
         private static readonly string[] Summaries = new[]

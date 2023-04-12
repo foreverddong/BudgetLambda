@@ -48,7 +48,7 @@ namespace BudgetLambda.Server.Pages
             }
             this.healthStatus = await package.CheckHealth(client);
             this.processing = false;
-            this.mermaidDefinition = await this.GenerateDiagram();
+            this.mermaidDefinition = this.GenerateDiagram();
             StateHasChanged();
 
         }
@@ -87,7 +87,7 @@ namespace BudgetLambda.Server.Pages
             navigation.NavigateTo($"/packageeditor/{this.package.PackageID}/manage-component");
         }
 
-        private async Task<string> GenerateDiagram()
+        private string GenerateDiagram()
         {
             var builder = new StringBuilder();
             builder.AppendLine("flowchart LR;");
@@ -95,7 +95,7 @@ namespace BudgetLambda.Server.Pages
                 .Select(s => $"{s.me.ComponentID}[{s.me.ComponentName}<br/>{s.me.Type}<br/>healthy: {s.status}]")
                 .Aggregate("",(a, b) => $"{a}\n{b}"));
             var mermaidConnections =
-                this.package.ChildComponents.SelectMany(c => c.Next.Select(sub => $"{c.ComponentID} --> {sub.ComponentID}")).Aggregate(String.Empty, (a, b) => $"{a}\n{b}");
+                this.package.ChildComponents.SelectMany(c => c.Next.Select(sub => $"{c.ComponentID} --> {sub.ComponentID}")).Aggregate(string.Empty, (a, b) => $"{a}\n{b}");
             builder.AppendLine(mermaidConnections);
             return builder.ToString();
         }

@@ -8,9 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BudgetLambda.Server.Pages
 {
+    /// <summary>
+    /// Deprecated.
+    /// </summary>
     public partial class ControlPanel
     {
-        public async Task SampleWorkflow()
+        private async Task SampleWorkflow()
         {
             var maptimestwo = new CSharpLambdaMap
             {
@@ -116,7 +119,7 @@ namespace BudgetLambda.Server.Pages
             await scheduler.SchedulePackage($"{Path.GetTempPath}budget-{package.PackageName}-{Guid.NewGuid().ShortID()}/",(a) => { });
         }
 
-        public async Task Testbed()
+        private async Task Testbed()
         {
             await database.CSharpLambdaMaps.LoadAsync();
             await database.StdoutSinks.LoadAsync();

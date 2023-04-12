@@ -6,14 +6,35 @@ using BudgetLambda.CoreLib.Database;
 
 namespace BudgetLambda.Server.Data
 {
+    /// <summary>
+    /// Provides a set of sample components for debug usage.
+    /// </summary>
     public class SampleComponents
     {
         private readonly BudgetContext database;
+        /// <summary>
+        /// Dependency Injection constructor.
+        /// </summary>
+        /// <param name="_database">
+        /// A BudgetContext EF Core instance for database access.
+        /// </param>
         public SampleComponents(BudgetContext _database)
         {
             this.database = _database;
         }
 
+        /// <summary>
+        /// Builds a complete package consisting of 5 components and 3 schemas.
+        /// </summary>
+        /// <param name="tenant">
+        /// The email of the tenant.
+        /// </param>
+        /// <param name="name">
+        /// The name of the package.
+        /// </param>
+        /// <returns>
+        /// A constructed pipeline package.
+        /// </returns>
         public async Task<PipelinePackage> BuildCompletePackage(string tenant, string name)
         {
             var documentSchema = await BuildTextDocumentSchema();
@@ -43,7 +64,7 @@ namespace BudgetLambda.Server.Data
             return pkg;
         }
 
-        public async Task<HttpSource> BuildHttpSource(DataSchema s)
+        private async Task<HttpSource> BuildHttpSource(DataSchema s)
         {
             var component = new HttpSource 
             {
@@ -56,7 +77,7 @@ namespace BudgetLambda.Server.Data
             return component;
         }
 
-        public async Task<CSharpLambdaMap> BuildCountingLambda(DataSchema input, DataSchema output)
+        private async Task<CSharpLambdaMap> BuildCountingLambda(DataSchema input, DataSchema output)
         {
             var code =
                 """
@@ -80,7 +101,7 @@ namespace BudgetLambda.Server.Data
             return component;
         }
                
-        public async Task<CSharpLambdaMap> BuildAllCapsLambda(DataSchema input, DataSchema output)
+        private async Task<CSharpLambdaMap> BuildAllCapsLambda(DataSchema input, DataSchema output)
         {
             var code =
                 """
@@ -105,7 +126,7 @@ namespace BudgetLambda.Server.Data
             return component;
         }
 
-        public async Task<StdoutSink> BuildCountingSink(DataSchema input)
+        private async Task<StdoutSink> BuildCountingSink(DataSchema input)
         {
             var component = new StdoutSink
             {
@@ -118,7 +139,7 @@ namespace BudgetLambda.Server.Data
             return component;
         }
 
-        public async Task<StdoutSink> BuildAllCapsSink(DataSchema input)
+        private async Task<StdoutSink> BuildAllCapsSink(DataSchema input)
         {
             var component = new StdoutSink
             {
@@ -131,7 +152,7 @@ namespace BudgetLambda.Server.Data
             return component;
         }
 
-        public async Task<DataSchema> BuildTextDocumentSchema()
+        private async Task<DataSchema> BuildTextDocumentSchema()
         {
             var schema = new DataSchema
             {
@@ -147,7 +168,7 @@ namespace BudgetLambda.Server.Data
             return schema;
         }
 
-        public async Task<DataSchema> BuildWordCountSchema()
+        private async Task<DataSchema> BuildWordCountSchema()
         {
             var schema = new DataSchema 
             {
@@ -163,7 +184,7 @@ namespace BudgetLambda.Server.Data
             return schema;
         }
 
-        public async Task<DataSchema> BuildAllCapsSchema()
+        private async Task<DataSchema> BuildAllCapsSchema()
         {
             var schema = new DataSchema
             {

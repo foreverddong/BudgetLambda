@@ -8,12 +8,18 @@ using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
 
 namespace BudgetLambda.Server.Pages
 {
+    /// <summary>
+    /// Component Mangement page, contains information of all components currently in a package.
+    /// </summary>
     public partial class ComponentManagement
     {
+        /// <summary>
+        /// Parameter for the current package.
+        /// </summary>
         [Parameter]
         public PipelinePackage Package { get; set; }
-        public ComponentBase SelectedComponent { get; set; }
-        public ComponentEditor? editor { get; set; }
+        private ComponentBase SelectedComponent { get; set; }
+        private ComponentEditor? editor { get; set; }
 
         //OK, this is a classic case of boilerplate code. Since the deadline is in two weeks we'll leave it as-is
         private List<(string id, Func<Task> callback)> CreationCallbacks =>
@@ -25,7 +31,7 @@ namespace BudgetLambda.Server.Pages
             };
 
 
-        public async Task CreateComponent<T>() where T : ComponentBase, new()
+        private async Task CreateComponent<T>() where T : ComponentBase, new()
         {
             T newComponent = new() { ComponentName = "New Component" };
             this.Package.ChildComponents.Add(newComponent);
@@ -38,7 +44,7 @@ namespace BudgetLambda.Server.Pages
             await this.LoadComponent(newComponent);
         }
 
-        public async Task LoadComponent(ComponentBase component)
+        private async Task LoadComponent(ComponentBase component)
         {
             this.SelectedComponent = component;
             if (editor is not null)
@@ -48,7 +54,7 @@ namespace BudgetLambda.Server.Pages
 
         }
 
-        public async Task RemoveComponent(ComponentBase component)
+        private async Task RemoveComponent(ComponentBase component)
         {
             database.Components.Remove(component);
             if (this.SelectedComponent == component) this.SelectedComponent = null;

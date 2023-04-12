@@ -4,19 +4,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BudgetLambda.Server.Pages
 {
+    /// <summary>
+    /// Web UI page for editing the schemas of a package.
+    /// </summary>
     public partial class SchemaEditor
     {
+        /// <summary>
+        /// The package to read and write data to.
+        /// </summary>
         [Parameter]
         public PipelinePackage Package { get; set; }
 
-        public DataSchema? SelectedSchema { get; set; }
-
+        private DataSchema? SelectedSchema { get; set; }
+/// <inheritdoc/>
         protected override void OnInitialized()
         {
             base.OnInitialized();
         }
 
-        public async Task CreateSchema()
+        private async Task CreateSchema()
         {
             var schema = new DataSchema() { SchemaName = "New Schema", };
             this.Package.Schamas.Add(schema);
@@ -24,13 +30,13 @@ namespace BudgetLambda.Server.Pages
             await database.SaveChangesAsync();
         }
 
-        public async Task DeleteSchema(DataSchema s)
+        private async Task DeleteSchema(DataSchema s)
         {
             this.database.Remove(s);
             await database.SaveChangesAsync();
         }
 
-        public async Task AddDefinition()
+        private async Task AddDefinition()
         {
             var def = new PropertyDefinition { Type = DataType.String, Identifier = "New Variable" };
             database.Add(def);
@@ -38,7 +44,7 @@ namespace BudgetLambda.Server.Pages
             await database.SaveChangesAsync();
         }
 
-        public async Task DeleteDefinition(PropertyDefinition s)
+        private async Task DeleteDefinition(PropertyDefinition s)
         {
             database.Remove(s);
             this.SelectedSchema.Mapping.Remove(s);

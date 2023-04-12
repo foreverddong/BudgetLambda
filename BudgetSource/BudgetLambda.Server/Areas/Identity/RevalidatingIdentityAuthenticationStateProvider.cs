@@ -7,6 +7,7 @@ using System.Security.Claims;
 
 namespace BudgetLambda.Server.Areas.Identity
 {
+#pragma warning disable CS1591
     public class RevalidatingIdentityAuthenticationStateProvider<TUser>
         : RevalidatingServerAuthenticationStateProvider where TUser : class
     {
