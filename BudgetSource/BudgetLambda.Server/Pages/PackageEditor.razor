@@ -7,6 +7,7 @@
 @inject NavigationManager navigation
 @inject FaasClient client
 @inject BudgetWorkloadScheduler scheduler
+@inject IJSRuntime interop
 
 <MudOverlay @bind-Visible="processing" DarkBackground="true" AutoClose="false">
     <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
@@ -14,53 +15,65 @@
     <MudProgressLinear Color="Color.Info" Size="Size.Medium" Value="@process" Class="my-7" />
 </MudOverlay>
 
-<MudContainer>
-    <MudGrid>
-        <MudItem md="12">
-            <MudGrid>
-                <MudItem md="6">
-                    <MudField Label="Package ID" Variant="Variant.Filled">@package.PackageID</MudField>
-                </MudItem>
-                <MudItem md="6">
-                    <MudTextField @bind-Value="package.PackageName" Label="Package Name" Variant="Variant.Outlined"></MudTextField>
-                </MudItem>
-            </MudGrid>
-        </MudItem>
-        <MudItem md="3">
-            <MudPaper Width="300px">
-                <MudList Clickable="true">
-                    <MudListSubheader>
-                        @if (creation)
-                        {
-                            <MudAlert Severity="Severity.Warning">New Pipeline</MudAlert>
-                        }
-                        else if (processing)
-                        {
-                            <MudAlert Severity="Severity.Info" Variant="Variant.Filled">Checking...</MudAlert>
-                        }
-                        else if (healthy)
-                        {
-                            <MudAlert Severity="Severity.Success">Healthy</MudAlert>
-                        }
-                        else
-                        {
-                            <MudAlert Severity="Severity.Error">Problems Detected</MudAlert>
-                        }
-                    </MudListSubheader>
-                    <MudListItem Text="Manage Components" OnClick="OnClickManageComponent"></MudListItem>
-                    <MudListItem Text="Manage Schemas"></MudListItem>
-                    <MudListItem Text="@saveText" OnClick="SavePackage"></MudListItem>
-                    <MudListItem Text="Bring Package Offline" OnClick="PurgePipeline"></MudListItem>
-                    @if (!creating)
-                    {
-                        <MudListItem Text="Redeploy Pipeline" OnClick="RedeployPipeline"></MudListItem>
-                    }
-                    
-                </MudList>
-            </MudPaper>
-        </MudItem>
-        <MudItem md="9">
-            <MermaidDiagram Definition="@mermaidDefinition"></MermaidDiagram>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+<MudTabs Elevation="1" Rounded="true" PanelClass="pa-6" Color="Color.Dark" Centered="true">
+    <MudTabPanel Text="Pipeline Status">
+        <ChildContent>
+            <MudContainer>
+                <MudGrid>
+                    <MudItem md="12">
+                        <MudGrid>
+                            <MudItem md="6">
+                                <MudField Label="Package ID" Variant="Variant.Filled">@package.PackageID</MudField>
+                            </MudItem>
+                            <MudItem md="6">
+                                <MudTextField @bind-Value="package.PackageName" Label="Package Name" Variant="Variant.Outlined"></MudTextField>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem md="3">
+                        <MudPaper Width="300px">
+                            <MudList Clickable="true">
+                                <MudListSubheader>
+                                    @if (creation)
+                                    {
+                                        <MudAlert Severity="Severity.Warning">New Pipeline</MudAlert>
+                                    }
+                                    else if (processing)
+                                    {
+                                        <MudAlert Severity="Severity.Info" Variant="Variant.Filled">Checking...</MudAlert>
+                                    }
+                                    else if (healthy)
+                                    {
+                                        <MudAlert Severity="Severity.Success">Healthy</MudAlert>
+                                    }
+                                    else
+                                    {
+                                        <MudAlert Severity="Severity.Error">Problems Detected</MudAlert>
+                                    }
+                                </MudListSubheader>
+                                <MudListItem Text="@saveText" OnClick="SavePackage"></MudListItem>
+                                <MudListItem Text="Bring Package Offline" OnClick="PurgePipeline"></MudListItem>
+                                @if (!creating)
+                                {
+                                    <MudListItem Text="Redeploy Pipeline" OnClick="RedeployPipeline"></MudListItem>
+                                    <MudListItem Text="Delete Package" OnClick="DeletePackage"></MudListItem>
+                                }
+
+                            </MudList>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem md="9">
+                        <MermaidDiagram Definition="@mermaidDefinition"></MermaidDiagram>
+                    </MudItem>
+                </MudGrid>
+
+            </MudContainer>
+        </ChildContent>
+    </MudTabPanel>
+    <MudTabPanel Text="Components">
+        <ComponentManagement Package="this.package"></ComponentManagement>
+    </MudTabPanel>
+    <MudTabPanel Text="Schemas">
+        <SchemaEditor Package="this.package"></SchemaEditor>
+    </MudTabPanel>
+</MudTabs>

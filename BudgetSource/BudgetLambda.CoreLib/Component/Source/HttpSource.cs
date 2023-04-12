@@ -8,10 +8,12 @@ using Docker.DotNet;
 using Docker.DotNet.Models;
 using BudgetLambda.CoreLib.Utility.Extensions;
 using BudgetLambda.CoreLib.Utility.Faas;
+using BudgetLambda.CoreLib.Component.Interfaces;
 
 namespace BudgetLambda.CoreLib.Component.Source
 {
-    public class HttpSource : ComponentBase
+    [BudgetComponent(ComponentType.Source, "Source - Http")]
+    public class HttpSource : ComponentBase, ISource
     {
 
         public override string ImageTag => "registry-ui.donglinxu.com/budget/httpsource:latest";
@@ -19,6 +21,9 @@ namespace BudgetLambda.CoreLib.Component.Source
         public override ComponentType Type => ComponentType.Source;
 
         public override string? ServiceName => $"source-{this.ComponentID.ShortID()}-{this.ComponentName}".ToLower();
+
+        public string ServiceUri => $"/function/{ServiceName}/msg";
+
 
         public override Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {

@@ -3,6 +3,7 @@ using BudgetLambda.CoreLib.Utility.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 using System.Security.Claims;
 using System.Text;
 using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
@@ -30,6 +31,7 @@ namespace BudgetLambda.Server.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            //await interop.InvokeVoidAsync("undef");
             this.User = (await authenticationState).User;
             if (packageid is null)
             {
@@ -91,11 +93,22 @@ namespace BudgetLambda.Server.Pages
             builder.AppendLine("flowchart LR;");
             builder.AppendLine(this.healthStatus
                 .Select(s => $"{s.me.ComponentID}[{s.me.ComponentName}<br/>{s.me.Type}<br/>healthy: {s.status}]")
-                .Aggregate((a, b) => $"{a}\n{b}"));
+                .Aggregate("",(a, b) => $"{a}\n{b}"));
             var mermaidConnections =
                 this.package.ChildComponents.SelectMany(c => c.Next.Select(sub => $"{c.ComponentID} --> {sub.ComponentID}")).Aggregate(String.Empty, (a, b) => $"{a}\n{b}");
             builder.AppendLine(mermaidConnections);
             return builder.ToString();
+        }
+
+        private async Task DeletePackage()
+        {
+            database.PropertyDefinitions.RemoveRange(this.package.Schamas.SelectMany(s => s.Mapping));
+            await database.SaveChangesAsync();
+            database.DataSchemas.RemoveRange(this.package.Schamas);
+            await database.SaveChangesAsync();
+            database.PipelinePackages.Remove(this.package);
+            await database.SaveChangesAsync();
+            navigation.NavigateTo("/");
         }
     }
 }

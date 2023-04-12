@@ -4,9 +4,7 @@
     {
         public OutputModel HandleData(InputModel data)
         {
-            var output = new OutputModel();
-            output.Words = (data.Number + 10).ToString();
-            return output;
+            return new OutputModel();
         }
     }
 }

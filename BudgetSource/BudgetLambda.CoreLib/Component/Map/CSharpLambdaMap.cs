@@ -9,10 +9,12 @@ using BudgetLambda.CoreLib.Utility.Extensions;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using BudgetLambda.CoreLib.Utility.Faas;
+using BudgetLambda.CoreLib.Component.Interfaces;
 
 namespace BudgetLambda.CoreLib.Component.Map
 {
-    public class CSharpLambdaMap : ComponentBase
+    [BudgetComponent(ComponentType.Map,"Lambda Map - C#", Language.CSHARP)]
+    public class CSharpLambdaMap : ComponentBase, ILambdaMap
     {
         public Language Lang => Language.CSHARP;
 

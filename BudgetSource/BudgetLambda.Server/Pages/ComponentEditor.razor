@@ -1,48 +1,80 @@
-﻿@page "/packageeditor/{packageid:guid}/manage-component/edit/{componentid:guid?}"
-@using BudgetLambda.CoreLib.Component
+﻿@using BudgetLambda.CoreLib.Component.Sink
+@using BudgetLambda.CoreLib.Component.Source
+@using BudgetLambda.CoreLib.Component.Map
+@using BudgetLambda.CoreLib.Component.Interfaces
 @using BudgetLambda.CoreLib.Database
+@using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase
+@inject IConfiguration conf
+@inject ILogger<ComponentEditor> logger
 @inject BudgetContext database
-@inject NavigationManager navigation
-@using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
-@using BlazorMonaco
-@using BlazorMonaco.Editor
 
-<MudContainer>
-    <MudGrid>
-        <MudItem md="12">
-            <MudGrid>
-                <MudItem md="6">
-                    <MudField Label="Package ID" Variant="Variant.Filled">@package.PackageID</MudField>
-                </MudItem>
-                <MudItem md="6">
-                    <MudField Label="Package Name" Variant="Variant.Filled">@package.PackageName</MudField>
-                </MudItem>
-            </MudGrid>
-        </MudItem>
-    </MudGrid>
-    <MudText Typo="Typo.h6">Component</MudText>
-    <MudForm @ref="form">
-        <MudTextField Label="Component id" @bind-Value="componentid" Disabled="true"></MudTextField>
-        <MudTextField Label="Component name" @bind-Value="componentName" Required="true" RequiredError="Component Name is required!"></MudTextField>
-        <div class="d-flex">
-            <MudRadioGroup T="ComponentType" Required="true" @bind-SelectedOption="@componentType" RequiredError="Component type is required!">
-                <MudRadio Option="@(ComponentType.Source)">HttpSource</MudRadio>
-                <MudRadio Option="@(ComponentType.Map)" onselect="">CSharpLambdaMap</MudRadio>
-                <MudRadio Option="@(ComponentType.Sink)">StdoutSink</MudRadio>
-            </MudRadioGroup>
-        </div>
-        <MudSelect T="ComponentBase" Label="Child components">
-            @foreach (var orphanComponent in orphanComponents)
+<MudGrid>
+    <MudItem md="6">
+        <MudField Label="Component ID" Variant="Variant.Filled">@Component.ComponentID</MudField>
+    </MudItem>
+    <MudItem md="6">
+        <MudTextField @bind-Value="Component.ComponentName" Label="Component Name" Variant="Variant.Outlined"></MudTextField>
+    </MudItem>
+    <MudItem md="3">
+        <MudSelect T="DataSchema" Disabled="inputSchemaDisabled" Label="Input Schema" Variant="Variant.Outlined" @bind-Value="this.Component.InputSchema">
+            @foreach (var s in this.Package.Schamas)
             {
-                <MudSelectItem T="ComponentBase">@orphanComponent.ComponentName</MudSelectItem>
+                <MudSelectItem Value="s">@s.ToString()</MudSelectItem>
             }
         </MudSelect>
-        
-        @if (selectedMap)
-        {
-            <StandaloneCodeEditor Id="1" />
-        }
-
-    </MudForm>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OnSubmit">Submit</MudButton>
-</MudContainer>
+    </MudItem>
+    <MudItem md="3">
+        <MudSelect T="DataSchema" Disabled="outputSchemaDisabled" Label="Output Schema" Variant="Variant.Outlined" @bind-Value="this.Component.OutputSchema">
+            @foreach (var s in this.Package.Schamas)
+            {
+                <MudSelectItem Value="s">@s.ToString()</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    @if (this.nextComponentDisabled)
+    {
+        <MudAlert Severity="Severity.Warning">This Component is either 1. Detached or 2. a Sink, in which cases Next components cannot be added.</MudAlert>
+    }
+    else
+    {
+        <MudItem md="12">
+            <MudDropContainer @ref="dropContainer" T="ComponentBase" Items="this.Package.ChildComponents" ItemsSelector="DropSelector" ItemDropped="ItemUpdated">
+                <ChildContent>
+                    <MudGrid>
+                        <MudItem md="6">
+                            <MudPaper Class="ma-4 flex-grow-1">
+                                <MudList Clickable="true" Class="d-flex flex-column mud-height-full">
+                                    <MudListSubheader>Avaliable Components</MudListSubheader>
+                                    <MudDropZone T="ComponentBase" Identifier="avaliable" Class="flex-grow-1" Style="min-height:400px;" />
+                                </MudList>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem md="6">
+                            <MudPaper Class="ma-4 flex-grow-1">
+                                <MudList Clickable="true" Class="d-flex flex-column mud-height-full">
+                                    <MudListSubheader>Next Components in Pipeline</MudListSubheader>
+                                    <MudDropZone T="ComponentBase" Identifier="selected" Class="flex-grow-1" Style="min-height:400px;" />
+                                </MudList>
+                            </MudPaper>
+                        </MudItem>
+                    </MudGrid>
+                </ChildContent>
+                <ItemRenderer>
+                    <MudListItem Text="@context.ComponentName" />
+                </ItemRenderer>
+            </MudDropContainer>
+        </MudItem>
+    }
+    @if (Component is HttpSource scr)
+    {
+        <MudItem md="12">
+            <MudField Label="Service Uri" Variant="Variant.Filled">@($"{conf.GetValue<string>("OpenFaas:GatewayAddr")}{scr.ServiceUri}")</MudField>
+            </MudItem>
+    }
+    @if (Component is ILambdaMap mcr)
+    {
+        <MudItem md="12">
+            <StandaloneCodeEditor @ref="editor" Id="lambda-editor" ConstructionOptions="CSharpEditorOptions" CssClass="lambda-editor-class" OnKeyDown="UpdateCodeValue" />
+        </MudItem>
+    }
+</MudGrid>

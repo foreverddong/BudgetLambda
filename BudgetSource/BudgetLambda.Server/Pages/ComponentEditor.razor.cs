@@ -1,112 +1,111 @@
-﻿using BudgetLambda.CoreLib.Component;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using MudBlazor;
-using static MudBlazor.CategoryTypes;
-using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
+﻿using BlazorMonaco;
+using BlazorMonaco.Editor;
 using BudgetLambda.CoreLib.Component.Map;
-using BudgetLambda.CoreLib.Component.Sink;
-using BudgetLambda.CoreLib.Component.Source;
+using Microsoft.AspNetCore.Components;
+using BudgetLambda.CoreLib.Component.Interfaces;
+using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
+using BudgetLambda.CoreLib.Component;
+using MudBlazor;
 
 namespace BudgetLambda.Server.Pages
 {
     public partial class ComponentEditor
     {
         [Parameter]
-        public Guid packageid { get; set; }
+        public ComponentBase Component { get; set; }
         [Parameter]
-        public Guid? componentid { get; set; }
-        [CascadingParameter]
-        private Task<AuthenticationState>? authenticationState { get; set; }
+        public PipelinePackage Package { get; set; }
 
-        private ComponentBase? component;
+        private StandaloneCodeEditor? editor { get; set; }
+        private MudDropContainer<ComponentBase>? dropContainer { get; set; }
 
-        private ClaimsPrincipal User { get; set; }
-        private PipelinePackage? package;
-        
-        private bool created;
-        MudForm form;
-        private ComponentType componentType;
-        private String componentName;
-        private List<ComponentBase> orphanComponents;
-        protected bool selectedMap;
+        private bool inputSchemaDisabled => (Component is ISource);
+        private bool outputSchemaDisabled => (Component is ISink);
 
-        protected override async Task OnInitializedAsync()
+        private bool nextComponentDisabled => (Component is ISink) || (this.Package.FindOrphanedComponents().Contains(this.Component));
+
+        private StandaloneEditorConstructionOptions CSharpEditorOptions(StandaloneCodeEditor editor)
         {
-            var auth = await authenticationState;
-            this.User = auth.User;
-            var res = (from p in database.PipelinePackages
-                       where p.PackageID == packageid
-                       select p).ToList();
-            this.package = res.First();
-            this.orphanComponents = package.FindOrphanedComponents();
-            if (componentid is null)
+            return new StandaloneEditorConstructionOptions
             {
-                this.created = false;
-                this.componentid = Guid.NewGuid();
-                this.componentName = "";
-            } else
-            {
-                this.created = true;
-                this.component = (from c in database.Components
-                                  where c.ComponentID == componentid
-                                  select c
-                                  ).First();
-                this.componentName = this.component.ComponentName;
-                this.componentType = this.component.Type;
-                if (this.componentType == ComponentType.Map)
+                AutomaticLayout = true,
+                Language = "csharp",
+                Value = """
+                public partial class Handler
                 {
-                    this.selectedMap = true;
+                    public OutputModel HandleData(InputModel data)
+                    {
+                        return new OutputModel();
+                    }
+                }
+                """,
+            };
+        }
+
+        private async Task UpdateCodeValue(KeyboardEvent e)
+        {
+            var model = await editor.GetModel();
+            var code = await model.GetValue(EndOfLinePreference.TextDefined, true);
+            if (Component is ILambdaMap c)
+            {
+                c.Code = code;
+            }
+        }
+
+        public async Task ReloadPageAsync()
+        {
+            //This is another one of those really stupid workarounds.
+            await Task.Delay(100);
+            if (Component is ILambdaMap c)
+            {
+                var model = await editor.GetModel();
+                await model.SetValue(c.Code);
+            }
+            dropContainer.Refresh();
+            StateHasChanged();
+        }
+
+        private bool DropSelector(ComponentBase item, string dropid)
+        {
+            var reachableItems = this.Package.Source.AllChildComponents();
+            return dropid switch
+            {
+                "avaliable" => (!reachableItems.Contains(item) && this.Component != item),
+                "selected" => (this.Component.Next.Contains(item)),
+                _ => false,
+            };
+
+        }
+
+        private async Task ItemUpdated(MudItemDropInfo<ComponentBase> dropItem)
+        {
+            if (dropItem.DropzoneIdentifier == "selected")
+            {
+                if (!this.Component.Next.Contains(dropItem.Item))
+                {
+                    this.Component.Next.Add(dropItem.Item);
+                }
+
+            }
+            else if (dropItem.DropzoneIdentifier == "avaliable")
+            {
+                if (this.Component.Next.Contains(dropItem.Item))
+                {
+                    this.Component.Next.Remove(dropItem.Item);
+                    dropItem.Item.DetachChildComponents();
                 }
             }
+            await database.SaveChangesAsync();
         }
 
-        private async Task<ComponentBase> OnSubmit()
+        protected override async void OnAfterRender(bool firstRender)
         {
-            await form.Validate();
-            if (!form.IsValid) return null;
-
-            if (componentType == ComponentType.Source)
+            if (firstRender)
             {
-                var newComponent = new HttpSource
-                {
-
-                    ComponentName = componentName,
-                };
-                database.Components.Add(newComponent);
-                await database.SaveChangesAsync();
-                return newComponent;
-            } else if (componentType == ComponentType.Map)
-            {
-                var newComponent = new CSharpLambdaMap
-                {
-                    ComponentName = componentName,
-                };
-                database.Components.Add(newComponent);
-                await database.SaveChangesAsync();
-                return newComponent;
-            } else
-            {
-                var newComponent = new StdoutSink
-                {
-                    ComponentName = componentName,
-                };
-                database.Components.Add(newComponent);
-                await database.SaveChangesAsync();
-                return newComponent;
+                await this.ReloadPageAsync();
             }
+            base.OnAfterRender(firstRender);
         }
 
-        private void OnSelectMap()
-        {
-            this.selectedMap = true;
-        }
-
-        private void OnSelectNotMap()
-        {
-            this.selectedMap = false;
-        }
     }
 }

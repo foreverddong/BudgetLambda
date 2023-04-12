@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetLambda.CoreLib.Component
+namespace BudgetLambda.CoreLib.Component.Interfaces
 {
-    public enum Language
+    public interface ILambdaMap
     {
-        CSHARP,
-        NONE,
+        public string Code { get; set; }
     }
 }

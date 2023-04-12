@@ -7,22 +7,42 @@ namespace BudgetLambda.Server.Pages
     public partial class SchemaEditor
     {
         [Parameter]
-        public string packageid { get; set; }
-        private Guid packageGuid => Guid.Parse(packageid);
+        public PipelinePackage Package { get; set; }
 
-        private List<DataSchema> schemas { get; set; }
-        private DataSchema selectedSchema { get; set; }
+        public DataSchema? SelectedSchema { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
-            this.schemas = await this.ObtainSchemas();
+            base.OnInitialized();
         }
 
-        private async Task<List<DataSchema>> ObtainSchemas()
+        public async Task CreateSchema()
         {
-            var components = database.PipelinePackages.Where(p => p.PackageID == packageGuid).SelectMany(p => p.ChildComponents);
-            var schemas = components.Select(c => c.InputSchema).UnionBy(components.Select(c => c.OutputSchema), c => c.SchemaID);
-            return await schemas.ToListAsync();
+            var schema = new DataSchema() { SchemaName = "New Schema", };
+            this.Package.Schamas.Add(schema);
+            this.database.Add(schema);
+            await database.SaveChangesAsync();
+        }
+
+        public async Task DeleteSchema(DataSchema s)
+        {
+            this.database.Remove(s);
+            await database.SaveChangesAsync();
+        }
+
+        public async Task AddDefinition()
+        {
+            var def = new PropertyDefinition { Type = DataType.String, Identifier = "New Variable" };
+            database.Add(def);
+            this.SelectedSchema.Mapping.Add(def);
+            await database.SaveChangesAsync();
+        }
+
+        public async Task DeleteDefinition(PropertyDefinition s)
+        {
+            database.Remove(s);
+            this.SelectedSchema.Mapping.Remove(s);
+            await database.SaveChangesAsync();
         }
     }
 }
