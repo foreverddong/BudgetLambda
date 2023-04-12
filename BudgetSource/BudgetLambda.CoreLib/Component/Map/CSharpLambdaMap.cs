@@ -147,7 +147,7 @@ namespace CSharpFunction
 """;
             var builder = new StringBuilder();
             builder.AppendLine(prefix);
-            var decl = this.OutputSchema.Mapping.Select(s => $"public {ConvertNativeType(s.Type)} {s.Identifier} {{get; set;}}").Aggregate((a, b) => $"{a}\n{b}");
+            var decl = this.OutputSchema.Mapping.Select(s => $"public {ConvertNativeType(s)} {s.Identifier} {{get; set;}}").Aggregate((a, b) => $"{a}\n{b}");
             builder.AppendLine(decl);
             builder.AppendLine(postfix);
             return builder.ToString();
@@ -174,15 +174,19 @@ namespace CSharpFunction
             return builder.ToString();
         }
 
-        private string ConvertNativeType(DataType t)
+        private string ConvertNativeType(PropertyDefinition d)
         {
-            return t switch 
-            { 
+            var t = d.Type;
+            var typename =  t switch
+            {
                 DataType.Boolean => "bool",
                 DataType.String => "string",
                 DataType.Float => "double",
                 DataType.Integer => "int",
+                _ => throw new NotImplementedException(),
             };
+            var listed = $"List<{typename}>";
+            return d.IsList ? listed : typename;
         }
     }
 }
