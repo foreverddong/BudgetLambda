@@ -44,12 +44,12 @@ namespace BudgetLambda.Server.Pages
 
         private async Task UpdateCodeValue(KeyboardEvent e)
         {
-            var model = await editor.GetModel();
-            var code = await model.GetValue(EndOfLinePreference.TextDefined, true);
+            var code = await editor.GetValue();
             if (Component is ILambdaMap c)
             {
                 c.Code = code;
             }
+            await database.SaveChangesAsync();
         }
 
         public async Task ReloadPageAsync()
@@ -58,8 +58,7 @@ namespace BudgetLambda.Server.Pages
             await Task.Delay(100);
             if (Component is ILambdaMap c)
             {
-                var model = await editor.GetModel();
-                await model.SetValue(c.Code);
+                await editor.SetValue(c.Code);
             }
             dropContainer.Refresh();
             StateHasChanged();

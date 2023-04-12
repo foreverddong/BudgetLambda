@@ -9,6 +9,7 @@ namespace BudgetLambda.CoreLib.Component
     public enum Language
     {
         CSHARP,
+        JAVASCRIPT,
         NONE,
     }
 }
