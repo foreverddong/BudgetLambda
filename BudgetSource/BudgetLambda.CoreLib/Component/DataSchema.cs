@@ -16,6 +16,7 @@ namespace BudgetLambda.CoreLib.Component
         public virtual List<PropertyDefinition> Mapping { get; set; } = new();
 
         public override string ToString() => SchemaName;
+
     }
 
     public enum DataType

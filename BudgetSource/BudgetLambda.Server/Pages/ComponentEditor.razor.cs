@@ -52,6 +52,8 @@ namespace BudgetLambda.Server.Pages
         {
             if (Component is ILambdaMap c)
             {
+                //This is another one of those really stupid workarounds.
+                await Task.Delay(200);
                 var model = await editor.GetModel();
                 await model.SetValue(c.Code);
             }
@@ -61,7 +63,6 @@ namespace BudgetLambda.Server.Pages
         {
             if (firstRender)
             {
-                await Task.Delay(500);
                 await this.ReloadPageAsync();
             }
             base.OnAfterRender(firstRender);
