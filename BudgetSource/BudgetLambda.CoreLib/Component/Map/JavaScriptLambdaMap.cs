@@ -20,7 +20,12 @@ namespace BudgetLambda.CoreLib.Component.Map
         public Language Lang => Language.JAVASCRIPT;
 
         /// <inheritdoc />
-        public string Code { get; set; }
+        public string Code { get; set; } = 
+        """
+            const handler = (inputObject) => {
+                return inputObject
+            }
+        """
 
         /// <inheritdoc />
         public override ComponentType Type => ComponentType.Map;
@@ -108,16 +113,11 @@ namespace BudgetLambda.CoreLib.Component.Map
         {
             string prefix =
 """
-export const handler = () => {
-""";
-            string postfix =
-"""
-}
+export 
 """;
             var builder = new StringBuilder();
-            builder.AppendLine(prefix);
+            builder.Append(prefix);
             builder.AppendLine(this.Code);
-            builder.AppendLine(postfix);
             return builder.ToString();
         }
 
