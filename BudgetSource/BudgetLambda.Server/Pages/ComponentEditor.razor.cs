@@ -7,6 +7,7 @@ using ComponentBase = BudgetLambda.CoreLib.Component.ComponentBase;
 using BudgetLambda.CoreLib.Component;
 using MudBlazor;
 using System.Text.Json;
+using BudgetLambda.CoreLib.Utility.Faas;
 
 namespace BudgetLambda.Server.Pages
 {
@@ -21,6 +22,7 @@ namespace BudgetLambda.Server.Pages
         private MudDropContainer<ComponentBase>? dropContainer { get; set; }
         private int currentReplicas { get; set; } = 0;
         private int targetReplicas { get; set; } = 0;
+        private bool componentOnline = false;
 
 
         private bool inputSchemaDisabled => (Component is ISource);
@@ -104,6 +106,7 @@ namespace BudgetLambda.Server.Pages
 
         private async Task ObtainCurrentRelicas()
         {
+            if (this.componentOnline is false) return;
             var info = await client.FunctionGETAsync(this.Component.ServiceName);
             var replicaCount = Convert.ToInt32(info.Replicas);
             this.currentReplicas = replicaCount;
@@ -123,10 +126,24 @@ namespace BudgetLambda.Server.Pages
             await this.ObtainCurrentRelicas();
         }
 
+        private async Task CheckComponentOnline()
+        {
+            try
+            {
+                var info = await client.FunctionGETAsync(this.Component.ServiceName);
+                this.componentOnline = true;
+            }
+            catch (FaasClientException ex)
+            {
+                this.componentOnline = false;
+            }
+        }
+
         protected override async void OnAfterRender(bool firstRender)
         {
             if (firstRender)
             {
+                await this.CheckComponentOnline();
                 await this.ReloadPageAsync();
             }
             base.OnAfterRender(firstRender);

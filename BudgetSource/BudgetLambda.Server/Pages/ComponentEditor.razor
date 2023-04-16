@@ -33,15 +33,25 @@
             }
         </MudSelect>
     </MudItem>
-    <MudItem md="2">
-        <MudField Label="Current Replicas" Variant="Variant.Text">@currentReplicas</MudField>
-    </MudItem>
-    <MudItem md="2">
-        <MudNumericField @bind-Value="targetReplicas" Label="Target Replicas" Variant="Variant.Text"></MudNumericField>
-    </MudItem>
-    <MudItem md="2">
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="ScaleReplicas">Scale</MudButton>
-    </MudItem>
+    @if (componentOnline)
+    {
+        <MudItem md="2">
+            <MudField Label="Current Replicas" Variant="Variant.Text">@currentReplicas</MudField>
+        </MudItem>
+        <MudItem md="2">
+            <MudNumericField @bind-Value="targetReplicas" Label="Target Replicas" Variant="Variant.Text"></MudNumericField>
+        </MudItem>
+        <MudItem md="2">
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="ScaleReplicas">Scale</MudButton>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem md="6">
+            <MudAlert Severity="Severity.Error">Component is Offline</MudAlert>
+        </MudItem>
+    }
+
     @if (this.nextComponentDisabled)
     {
         <MudAlert Severity="Severity.Warning">This Component is either 1. Detached or 2. a Sink, in which cases Next components cannot be added.</MudAlert>
