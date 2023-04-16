@@ -136,4 +136,4 @@ export const handler = () => {
             return d.IsList ? listed : typename;
         }
     }
-
+}

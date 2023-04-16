@@ -1,14 +1,15 @@
-# syntax=docker/dockerfile:1
 
-FROM node:18-alpine
-ENV NODE_ENV=production
+FROM ghcr.io/openfaas/of-watchdog:0.9.11 as watchdog
+FROM registry.donglinxu.com/budget/javascriptlambdamap:latest AS build
 
 WORKDIR /app
+COPY "handler.js" .
 
-COPY ["package.json", "package-lock.json*", "./"]
+COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
+RUN chmod +x /usr/bin/fwatchdog
 
-RUN npm install --production
-
-COPY . .
-
-CMD ["node", "index.js"]
+RUN echo $PATH
+ENV mode="http"
+ENV upstream_url="http://127.0.0.1:4001"
+ENV fprocess="node index.js"
+CMD ["fwatchdog"]
