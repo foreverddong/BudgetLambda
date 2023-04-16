@@ -30,6 +30,8 @@ namespace BudgetLambda.Server.Pages
 
         private bool nextComponentDisabled => (Component is ISink) || (this.Package.FindOrphanedComponents().Contains(this.Component));
 
+        private string logSrc => $"http://192.168.52.9/d-solo/5on-IIE4k/budgetlogs?orgId=1&var-jobname=openfaas-fn%2F{this.Component.ServiceName}&panelId=2";
+
         private StandaloneEditorConstructionOptions CSharpEditorOptions(StandaloneCodeEditor editor)
         {
             return new StandaloneEditorConstructionOptions
