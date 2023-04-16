@@ -100,4 +100,7 @@
             <StandaloneCodeEditor @ref="editor" Id="lambda-editor" ConstructionOptions="CSharpEditorOptions" CssClass="lambda-editor-class" OnKeyDown="UpdateCodeValue" />
         </MudItem>
     }
+    <MudItem md="12">
+        <iframe src="@this.logSrc" width="450" height="600" frameborder="0"></iframe>
+    </MudItem>
 </MudGrid>
