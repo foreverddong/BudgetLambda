@@ -67,7 +67,10 @@ namespace BudgetLambda.Server.Pages
                 await editor.SetValue(c.Code);
             }
             await this.ObtainCurrentRelicas();
-            dropContainer.Refresh();
+            if (dropContainer is not null)
+            {
+                dropContainer.Refresh();
+            }
             StateHasChanged();
         }
 

@@ -34,6 +34,12 @@ namespace BudgetLambda.CoreLib.Database
         /// All Lambda Map functions in C#
         /// </summary>
         public DbSet<CSharpLambdaMap> CSharpLambdaMaps { get; set; }
+
+        /// <summary>
+        /// All Email Sinks
+        /// </summary>
+        public DbSet<EmailSink> EmailSinks { get; set; }
+        
         /// <summary>
         /// All Stdout Sinks
         /// </summary>

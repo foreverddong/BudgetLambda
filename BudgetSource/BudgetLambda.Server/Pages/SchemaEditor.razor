@@ -58,7 +58,7 @@
                                 @foreach (var df in this.SelectedSchema.Mapping)
                                 {
                                     <MudItem md="2">
-                                        <MudCheckBox @bind-Checked="df.IsList" Label="List" Color="Color.Primary"></MudCheckBox>
+                                        <MudCheckBox @bind-Checked="df.IsList" @bind-Checked:after="SaveChangesAsync" Label="List" Color="Color.Primary" ></MudCheckBox>
                                     </MudItem>
                                     <MudItem md="4">
                                         <MudSelect @bind-Value="df.Type" Label="Variable Type" Variant="Variant.Outlined">

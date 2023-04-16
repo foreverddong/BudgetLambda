@@ -50,5 +50,10 @@ namespace BudgetLambda.Server.Pages
             this.SelectedSchema.Mapping.Remove(s);
             await database.SaveChangesAsync();
         }
+
+        private async Task SaveChangesAsync()
+        {
+            await database.SaveChangesAsync();
+        }
     }
 }

@@ -28,6 +28,7 @@ namespace BudgetLambda.Server.Pages
                 ("Lambda Map - C#", CreateComponent<CSharpLambdaMap>),
                 ("Source - Http", CreateComponent<HttpSource>),
                 ("Sink - Stdout", CreateComponent<StdoutSink>),
+                ("Sink - Email", CreateComponent<EmailSink>),
             };
 
 

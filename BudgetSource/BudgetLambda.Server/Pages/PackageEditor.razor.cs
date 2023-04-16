@@ -70,7 +70,7 @@ namespace BudgetLambda.Server.Pages
             await package.PurgePipeline(client);
             scheduler.LoadPackage(package);
             await scheduler.ConfigureMQ();
-            await scheduler.SchedulePackage($"{Path.GetTempPath}budget-{package.PackageName}-{Guid.NewGuid().ShortID()}/", (inc) => { this.process += inc; });
+            await scheduler.SchedulePackage($"{Path.GetTempPath()}budget-{package.PackageName}-{Guid.NewGuid().ShortID()}/", (inc) => { this.process += inc; });
             this.creating = false;
         }
 

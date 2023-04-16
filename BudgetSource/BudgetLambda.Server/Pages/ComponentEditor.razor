@@ -18,7 +18,8 @@
         <MudTextField @bind-Value="Component.ComponentName" Label="Component Name" Variant="Variant.Outlined"></MudTextField>
     </MudItem>
     <MudItem md="3">
-        <MudSelect T="DataSchema" Disabled="inputSchemaDisabled" Label="Input Schema" Variant="Variant.Outlined" @bind-Value="this.Component.InputSchema">
+        <MudSelect T="DataSchema" Disabled="inputSchemaDisabled" Label="Input Schema" Variant="Variant.Outlined" @bind-Value="this.Component.InputSchema"
+                   @bind-Value:after="async () => {await database.SaveChangesAsync();}">
             @foreach (var s in this.Package.Schamas)
             {
                 <MudSelectItem Value="s">@s.ToString()</MudSelectItem>
@@ -26,7 +27,8 @@
         </MudSelect>
     </MudItem>
     <MudItem md="3">
-        <MudSelect T="DataSchema" Disabled="outputSchemaDisabled" Label="Output Schema" Variant="Variant.Outlined" @bind-Value="this.Component.OutputSchema">
+        <MudSelect T="DataSchema" Disabled="outputSchemaDisabled" Label="Output Schema" Variant="Variant.Outlined" @bind-Value="this.Component.OutputSchema"
+                   @bind-Value:after="async () => {await database.SaveChangesAsync();}">
             @foreach (var s in this.Package.Schamas)
             {
                 <MudSelectItem Value="s">@s.ToString()</MudSelectItem>
