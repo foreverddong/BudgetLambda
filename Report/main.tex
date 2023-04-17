@@ -25,6 +25,11 @@
 \usepackage[english]{babel} % Specify a different language here - english by default
 
 \usepackage{lipsum} % Required to insert dummy text. To be removed otherwise
+\usepackage{tikz}
+\usepackage{tikzit}
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\graphicspath{ {./figures/} }
 
 %----------------------------------------------------------------------------------------
 %	COLUMNS
@@ -74,7 +79,7 @@
 
 \Keywords{Keyword1 --- Keyword2 --- Keyword3} % Keywords - if you don't want any simply remove all the text between the curly brackets
 \newcommand{\keywordname}{Keywords} % Defines the keywords heading name
-\newcommand{\CSh}{C\nolinebreak\hspace{-.05em}\raisebox{.6ex}{\tiny\bf \#}}
+\newcommand{\CSh}{C\nolinebreak\hspace{-.05em}\raisebox{.6ex}{\scriptsize\bf \#}}
 
 %----------------------------------------------------------------------------------------
 %	ABSTRACT
@@ -137,25 +142,46 @@ The \emph{BudgetLambda.CoreLib} is embedded directly in the server, with individ
 
 \subsubsection{BudgetLambda.BakedComponents}
 
-Several component implementations is baked-in with the initial release of the project. These components covers several common scenarios which demonstrates the core concepts of the project. Due to the time limitations, it was not feasible to have baked components covering multiple programming languages or multiple use-scenarios. Instead, baked components at their current stages serves the purposes as a reference points towards future development.
+The initial release of \emph{BudgetLambda} comes with a set of reference components that showcase the core concepts of the project through several common use scenarios. Due to time constraints, the number of baked-in components is limited and they only cover a specific range of programming languages and use cases. These components serve as reference points for future development, rather than an exhaustive set.
 
-\emph{BudgetLambda.CSharpLambdaMap} implements a serverless function snippet that takes in a user-defined \CSh
+\emph{BudgetLambda.HttpSource} implements a data source for the pipeline, exposes an HTTP endpoint for data input.
+
+\emph{BudgetLambda.CSharpLambdaMap}, \\ \emph{BudgetLambda.JavascriptLambdaMap} and \\ \emph{BudgetLambda.PythonLambdaMap} implements a serverless function snippet template that takes in a user-defined function, passes upstream input data to be handled by the user function, then sending processed data towards downstream components.
+
+\emph{BudgetLambda.StdOutSink} implements a simple sink that takes upstream data and prints them into stdout.
+
+\emph{BudgetLambda.EmailSink} implements a sink that takes upstream data and sends the results using email to an address specified by upstream.
 
 \subsection{Infrastructural Components}
 
-\lipsum[9] % Dummy text
+\subsubsection{Kubernetes}
 
-\begin{figure}[ht]\centering
-	\includegraphics[width=\linewidth]{results}
-	\caption{In-text Picture}
-	\label{fig:results}
-\end{figure}
+This software project is designed to operate on a Kubernetes cluster, which provides a highly scalable and fault-tolerant infrastructure for real-time traffic demands. The main user interaction point, \emph{BudgetLambda.Server}, is containerized without stateful dependencies, allowing it to efficiently scale up and down as needed. The scheduler automatically packages and deploys user-defined components into container images, which are then scheduled onto the cluster. With the use of Kubernetes, individual stages in the data processing pipeline can be scaled independently, increasing the overall efficiency of the infrastructure. In the event of catastrophic failures in compute nodes, the system is designed to maintain its fault-tolerant characteristics, ensuring a reliable and stable user experience.
 
-Reference to Figure \ref{fig:results}.
+\subsubsection{Docker Engine}
+
+The project leverages the widely adopted Docker image format to package user-defined components and packages. Once packaged, these images are stored in a private image registry, from where they can be scheduled to run on a Kubernetes cluster. It is noteworthy that Docker engine is only employed for image building and storage, while containerd serves as the preferred container runtime in this project.
+
+\subsubsection{RabbitMQ}
+
+The project utilizes RabbitMQ as a messaging broker for inter-component communication, specifically for message queuing between upstream and downstream components. The system creates a "Master Exchange" for each package, with individual components configured with unique routing keys based on their position in the pipeline. This approach aims to ensure optimal distribution and handling of messages between components, particularly in high scalability scenarios.
+
+\subsubsection{PostgreSQL}
+
+Data, package, and component definitions as well as serverless code snippets submitted by users are stored in a distinct PostgreSQL database server located outside of the Kubernetes cluster. To facilitate database access, \emph{BudgetLambda.CoreLib} utilizes an object-relational mapping (ORM) framework, obviating the need for raw SQL queries. PostgreSQL was chosen for its performance and versatility. However, it is possible to incorporate other databases through the abstraction layer, which is vendor-neutral.
+
+\subsection{Component Relations}
+
+The core access point for the system is the \\ \emph{BudgetLambda.Server} which is embedded with \\ \emph{BudgetLambda.Corelib} that exposes the central abstractions to users. The user can define pipeline packages and components via the web interface and store them in a PostgreSQL database. Subsequently, the user-defined components are combined with corresponding programming language templates, and the resulting code is pushed to a remote docker server for image building. The final container images are then pushed to a remote docker registry, and made available for deployment. The Scheduler processes these images according to the configuration of the components in the pipeline, ensuring that data flows correctly between them via the message queue. Once the Scheduler has completed its configuration, it schedules these components on the Kubernetes cluster for execution.
+
+\begin{figure*}
+	\includegraphics[width=\textwidth]{fig1}
+\end{figure*}
+
 
 %------------------------------------------------
 
-\section{User Guide}
+\section{Developer's Guide}
 
 \lipsum[10] % Dummy text
 
