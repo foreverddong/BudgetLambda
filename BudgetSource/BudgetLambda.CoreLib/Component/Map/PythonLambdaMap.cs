@@ -23,9 +23,8 @@ namespace BudgetLambda.CoreLib.Component.Map
         /// <inheritdoc />
         public string Code { get; set; } =
         """
-            const handler = (inputObject) => {
-                return inputObject
-            }
+            def handle_data(self, data):
+                return {"name": "Hello Python Lambda!"}
         """;
 
         /// <inheritdoc />
@@ -39,7 +38,7 @@ namespace BudgetLambda.CoreLib.Component.Map
         public override async Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             //Download the dockerfile
-            var dockerfileUri = configuration.GetValue<string>("Components:CSharpLambdaMap:DockerfileUri");
+            var dockerfileUri = configuration.GetValue<string>("Components:PythonLambdaMap:DockerfileUri");
             var client = new HttpClient();
             var response = await client.GetAsync(dockerfileUri);
             using (var fs = new FileStream($"{workdir}/Dockerfile", FileMode.CreateNew))
@@ -48,7 +47,7 @@ namespace BudgetLambda.CoreLib.Component.Map
             }
 
             //Write the handler
-            using (var fs = new FileStream($"{workdir}/handler.js", FileMode.CreateNew))
+            using (var fs = new FileStream($"{workdir}/handler.py", FileMode.CreateNew))
             using (var writer = new StreamWriter(fs))
             {
                 await writer.WriteLineAsync(this.ScaffoldCustomFunction());
@@ -116,7 +115,7 @@ namespace BudgetLambda.CoreLib.Component.Map
         {
             string prefix =
 """
-export 
+class Handler:
 """;
             var builder = new StringBuilder();
             builder.Append(prefix);

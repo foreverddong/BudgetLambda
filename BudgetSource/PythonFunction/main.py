@@ -14,9 +14,11 @@ def build_channel():
     password = os.getenv("PASSWORD")
     virtualhost = os.getenv("VIRTUALHOST")
     credentials = pika.PlainCredentials(username, password)
+
     parameters = pika.ConnectionParameters(hostname, 5672, virtualhost, credentials)
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
+
     return channel, connection
 
 
