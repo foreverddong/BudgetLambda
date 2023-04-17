@@ -53,6 +53,8 @@ namespace BudgetLambda.CoreLib.Database
         /// </summary>
         public DbSet<PropertyDefinition> PropertyDefinitions { get; set; }
 
+        public DbSet<JavaScriptLambdaMap> JavaScriptLambdaMaps { get; set; }
+
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
