@@ -6,15 +6,15 @@ const handler = require("./handler")
 const app = express()
 app.use(express.json())
 
-const HOST_NAME = process.env.HOST_NAME
-const QUEUE_NAME = process.env.QUEUE_NAME
-const EXCHANGE_TYPE = process.env.EXCHANGE_TYPE
-const EXCHANGE_NAME = process.env.EXCHANGE_NAME
-const USERNAME = process.env.USERNAME
-const PASSWORD = process.env.PASSWORD
-const VIRTUAL_HOST = process.env.VIRTUAL_HOST
-const INPUT_KEY = process.env.INPUT_KEY
-const OUTPUT_KEY = process.env.OUTPUT_KEY
+const HOST_NAME = process.env.RabbitMQ__Hostname
+const QUEUE_NAME = process.env.Pipeline__Queue
+const EXCHANGE_TYPE = "topic"
+const EXCHANGE_NAME = process.env.Pipeline__Exchange
+const USERNAME = process.env.RabbitMQ__Username
+const PASSWORD = process.env.RabbitMQ__Password
+const VIRTUAL_HOST = process.env.RabbitMQ__VirtualHost
+const INPUT_KEY = process.env.Pipeline__InputKey
+const OUTPUT_KEY = process.env.Pipeline__OutputKey
 
 var channel, connection
 
