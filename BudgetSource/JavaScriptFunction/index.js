@@ -1,6 +1,6 @@
 const express = require("express")
 const amqp = require("amqplib")
-const env_config = require("dotenv").config()
+require("dotenv").config()
 const handler = require("./handler")
 
 const app = express()
