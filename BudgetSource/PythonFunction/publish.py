@@ -1,5 +1,4 @@
 import os
-import sys
 
 from main import build_channel, bind_and_declare
 

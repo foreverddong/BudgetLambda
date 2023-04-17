@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import os
 
 from handler import Handler
-from output_model import OutputModel
 
 load_dotenv()
 
@@ -40,8 +39,7 @@ def publish_then_consume():
         input_object = json.loads(body)
         handler = Handler()
         output_object = handler.handle_data(input_object)
-        output_body = json.dumps(output_object.toJSON()).encode('utf-8')
-        # output_body = json.dumps(output_object)
+        output_body = json.dumps(output_object).encode('utf-8')
         channel.basic_publish(exchange=exchange_name, routing_key=output_key, body=output_body)
 
     # Start consuming messages

@@ -20,6 +20,10 @@ namespace BudgetLambda.CoreLib.Component
         /// </summary>
         JAVASCRIPT,
         /// <summary>
+        /// Python
+        /// </summary>
+        PYTHON,
+        /// <summary>
         /// Not related to any programming language, e.g. a source or a built-in sink.
         /// </summary>
         NONE,
