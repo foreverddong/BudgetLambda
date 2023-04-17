@@ -1,3 +1,5 @@
-export const handler = (inputObject) => {
+const handler = (inputObject) => {
   return inputObject
 }
+
+module.exports = handler

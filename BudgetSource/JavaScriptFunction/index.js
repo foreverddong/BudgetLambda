@@ -1,7 +1,7 @@
 const express = require("express")
 const amqp = require("amqplib")
 const env_config = require("dotenv").config()
-import {handler} from "./handler"
+const handler = require("./handler")
 
 const app = express()
 app.use(express.json())

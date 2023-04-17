@@ -25,7 +25,7 @@ namespace BudgetLambda.CoreLib.Component.Map
             const handler = (inputObject) => {
                 return inputObject
             }
-        """
+        """;
 
         /// <inheritdoc />
         public override ComponentType Type => ComponentType.Map;
@@ -37,7 +37,7 @@ namespace BudgetLambda.CoreLib.Component.Map
         public override async Task<MemoryStream> CreateWorkingPackage(string workdir, IConfiguration configuration)
         {
             //Download the dockerfile
-            var dockerfileUri = configuration.GetValue<string>("Components:CSharpLambdaMap:DockerfileUri");
+            var dockerfileUri = configuration.GetValue<string>("Components:JavaScriptLambdaMap:DockerfileUri");
             var client = new HttpClient();
             var response = await client.GetAsync(dockerfileUri);
             using (var fs = new FileStream($"{workdir}/Dockerfile", FileMode.CreateNew))
@@ -111,13 +111,13 @@ namespace BudgetLambda.CoreLib.Component.Map
 
         private string ScaffoldCustomFunction()
         {
-            string prefix =
+            string postfix = 
 """
-export 
+module.exports = handler
 """;
             var builder = new StringBuilder();
-            builder.Append(prefix);
             builder.AppendLine(this.Code);
+            builder.AppendLine(postfix);
             return builder.ToString();
         }
 
