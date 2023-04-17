@@ -1,0 +1,229 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Stylish Article
+% LaTeX Template
+% Version 2.2 (2020-10-22)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Mathias Legrand (legrand.mathias@gmail.com) 
+% With extensive modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[fleqn,10pt]{SelfArx} % Document font size and equations flushed left
+
+\usepackage[english]{babel} % Specify a different language here - english by default
+
+\usepackage{lipsum} % Required to insert dummy text. To be removed otherwise
+
+%----------------------------------------------------------------------------------------
+%	COLUMNS
+%----------------------------------------------------------------------------------------
+
+\setlength{\columnsep}{0.55cm} % Distance between the two columns of text
+\setlength{\fboxrule}{0.75pt} % Width of the border around the abstract
+
+%----------------------------------------------------------------------------------------
+%	COLORS
+%----------------------------------------------------------------------------------------
+
+\definecolor{color1}{RGB}{0,0,90} % Color of the article title and sections
+\definecolor{color2}{RGB}{0,20,20} % Color of the boxes behind the abstract and headings
+
+%----------------------------------------------------------------------------------------
+%	HYPERLINKS
+%----------------------------------------------------------------------------------------
+
+\usepackage{hyperref} % Required for hyperlinks
+
+\hypersetup{
+	hidelinks,
+	colorlinks,
+	breaklinks=true,
+	urlcolor=color2,
+	citecolor=color1,
+	linkcolor=color1,
+	bookmarksopen=false,
+	pdftitle={Title},
+	pdfauthor={Author},
+}
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE INFORMATION
+%----------------------------------------------------------------------------------------
+
+% \JournalInfo{Journal, Vol. XXI, No. 1, 1-5, 2013} % Journal information
+% \Archive{Additional note} % Additional notes (e.g. copyright, DOI, review/research article)
+
+\PaperTitle{BudgetLambda - Quick Serverless Pipelines} % Article title
+
+\Authors{Donglin Xu, Yiheng Niu, Qiu Chen} % Authors
+\affiliation{\textsuperscript{1}\textit{Department of Biology, University of Examples, London, United Kingdom}} % Author affiliation
+\affiliation{\textsuperscript{2}\textit{Department of Chemistry, University of Examples, London, United Kingdom}} % Author affiliation
+\affiliation{*\textbf{Corresponding author}: john@smith.com} % Corresponding author
+
+\Keywords{Keyword1 --- Keyword2 --- Keyword3} % Keywords - if you don't want any simply remove all the text between the curly brackets
+\newcommand{\keywordname}{Keywords} % Defines the keywords heading name
+\newcommand{\CSh}{C\nolinebreak\hspace{-.05em}\raisebox{.6ex}{\tiny\bf \#}}
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+% \Abstract{Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida mauris. Nam arcu libero, nonummy eget, consectetuer id, vulputate a, magna. Donec vehicula augue eu neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris ut leo. Cras viverra metus rhoncus sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in, pretium quis, viverra ac, nunc. Praesent eget sem vel leo ultrices bibendum. Aenean faucibus. Morbi dolor nulla, malesuada eu, pulvinar at, mollis ac, nulla. Curabitur auctor semper nulla. Donec varius orci eget risus. Duis nibh mi, congue eu, accumsan eleifend, sagittis quis, diam. Duis eget orci sit amet orci dignissim rutrum.}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Output the title and abstract box
+
+\tableofcontents % Output the contents section
+
+\thispagestyle{empty} % Removes page numbering from the first page
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\section*{Introduction} % The \section*{} command stops section numbering
+
+\addcontentsline{toc}{section}{Introduction} % Adds this section to the table of contents
+
+\indent \emph{BudgetLambda} is a user-friendly and versatile tool for constructing and deploying data processing pipelines that supports a variety of programming languages. It is built on top of a Kubernetes cluster and draws inspiration from recent concepts in serverless computing and distributed systems.
+
+At the heart of BudgetLambda is an automated image engine that arranges user-supplied short code snippets (lambdas) into a cohesive pipeline. These components are linked together to facilitate rapid prototyping across diverse programming languages. The platform allows for the independent scaling of each component according to workload demands, ensuring efficient resource utilization and optimal performance.
+
+The primary objective of BudgetLambda is to offer a collaborative environment that enables small groups with disparate technical backgrounds to collaborate effectively. By facilitating quick prototyping of key services, the tool provides an expedited pathway to transitioning into a custom-built end-to-end solution.
+
+%------------------------------------------------
+
+\section{Architecture}
+
+\indent \emph{BudgetLambda} is a software solution that leverages multiple open-source tools and custom libraries to enable its infrastructure. At the core of the project lies \par \noindent
+\texttt{BudgetLambda.CoreLib}, which provides abstractions for individual components and enables communication between infrastructural software packages. A long-running web UI, \texttt{BudgetLambda.Server}, sits on top of the core library and serves as the primary interface for users.
+
+The entire project, including user-defined software components, is designed to run on a Kubernetes cluster, ensuring efficient deployment and operations. Data storage and persistence are facilitated by a PostgreSQL database, while the ORM layer provides abstractions that enable the plugging in of other databases. User-defined functions are deployed using \texttt{OpenFaas}, and container building and storage are facilitated by \texttt{Docker}.
+
+The integration of open-source tools and custom libraries enables \emph{BudgetLambda} to offer a robust and scalable solution. The use of Kubernetes as the deployment environment further enhances the platform's operational efficiency, while the PostgreSQL database provides reliable data storage and persistence. The deployment of user-defined functions on \texttt{OpenFaas} and containerization using Docker enables \emph{BudgetLambda} to offer an efficient and user-friendly interface for constructing and deploying data processing pipelines.
+
+In summary, BudgetLambda offers a sophisticated and comprehensive infrastructure that is built upon a variety of open-source tools and custom libraries. Its deployment on a Kubernetes cluster, use of \texttt{PostgreSQL} for data storage and persistence, and deployment of user-defined functions on \texttt{OpenFaas} using Docker containerization, enable BudgetLambda to provide an accessible platform for building and deploying data processing pipelines.
+
+\subsection{Core Components}
+
+\subsubsection{BudgetLambda.CoreLib}
+
+The \emph{BudgetLambda.CoreLib} library serves as a foundational component of the system and provides abstractions that encapsulate the core functionality. Its primary feature is the ability to construct individual \emph{Pipeline Packages}, which contain component information, data flow, and data schema between each component. These packages can be scheduled onto the Kubernetes cluster through a \emph{Scheduler} that configures the pipeline and populates runtime execution information before performing the necessary packaging and deployment.
+
+To facilitate the deployment of components, the library defines an overall abstraction class called \emph{ComponentBase}. This class serves as a base for implementations and provides the common traits required before a component can be scheduled. Within each individual implementation of \emph{ComponentBase}, additional information such as health checking and log aggregation is performed. This functionality enables users to observe the deployment without resorting to external toolchains, thereby streamlining the development and deployment process.
+
+Overall, the \emph{BudgetLambda.CoreLib} library serves as a vital component of the system, providing essential abstractions and functionality for constructing and deploying data processing pipelines. Its ability to encapsulate core functionality and deploy components efficiently on a Kubernetes cluster enables users to focus on pipeline design and development, while the library handles the underlying infrastructure.
+
+\subsubsection{BudgetLambda.Server}
+
+The \emph{BudgetLambda.Server} sub-project is a long-running web service designed to provide users with an intuitive user interface for building pipelines and components. It incorporates basic user-based authentication for multi-tenant use scenarios. The front-end is developed entirely in .NET, adhering to modern front-end standards with a server-rendered SPA structure.
+
+The \emph{BudgetLambda.CoreLib} is embedded directly in the server, with individual functionality directly injected into pages, thereby allowing for swift interaction with the underlying infrastructure. This integration streamlines the development and deployment process, enabling users to focus on pipeline design and component development without having to worry about the underlying infrastructure. Overall, the \emph{BudgetLambda.Server} sub-project plays a crucial role in providing a user-friendly interface for pipeline design and deployment, thereby facilitating efficient and effective data processing.
+
+\subsubsection{BudgetLambda.BakedComponents}
+
+Several component implementations is baked-in with the initial release of the project. These components covers several common scenarios which demonstrates the core concepts of the project. Due to the time limitations, it was not feasible to have baked components covering multiple programming languages or multiple use-scenarios. Instead, baked components at their current stages serves the purposes as a reference points towards future development.
+
+\emph{BudgetLambda.CSharpLambdaMap} implements a serverless function snippet that takes in a user-defined \CSh
+
+\subsection{Infrastructural Components}
+
+\lipsum[9] % Dummy text
+
+\begin{figure}[ht]\centering
+	\includegraphics[width=\linewidth]{results}
+	\caption{In-text Picture}
+	\label{fig:results}
+\end{figure}
+
+Reference to Figure \ref{fig:results}.
+
+%------------------------------------------------
+
+\section{User Guide}
+
+\lipsum[10] % Dummy text
+
+\subsection{Subsection}
+
+\lipsum[11] % Dummy text
+
+\begin{table}[hbt]
+	\caption{Table of Grades}
+	\centering
+	\begin{tabular}{llr}
+		\toprule
+		\multicolumn{2}{c}{Name} \\
+		\cmidrule(r){1-2}
+		First name & Last Name & Grade \\
+		\midrule
+		John & Doe & $7.5$ \\
+		Richard & Miles & $2$ \\
+		\bottomrule
+	\end{tabular}
+	\label{tab:label}
+\end{table}
+
+\subsubsection{Subsubsection}
+
+\lipsum[12] % Dummy text
+
+\begin{description}
+	\item[Word] Definition
+	\item[Concept] Explanation
+	\item[Idea] Text
+\end{description}
+
+\subsubsection{Subsubsection}
+
+\lipsum[13] % Dummy text
+
+\begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
+	\item First item in a list
+	\item Second item in a list
+	\item Third item in a list
+\end{itemize}
+
+\subsubsection{Subsubsection}
+
+\lipsum[14] % Dummy text
+
+\subsection{Subsection}
+
+\lipsum[15-23] % Dummy text
+
+%------------------------------------------------
+
+\phantomsection
+\section*{Acknowledgments} % The \section*{} command stops section numbering
+
+\addcontentsline{toc}{section}{Acknowledgments} % Adds this section to the table of contents
+
+So long and thanks for all the fish \cite{Figueredo:2009dg, Smith:2012qr}.
+
+%----------------------------------------------------------------------------------------
+%	REFERENCE LIST
+%----------------------------------------------------------------------------------------
+
+\phantomsection
+\bibliographystyle{unsrt}
+\bibliography{sample.bib}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
