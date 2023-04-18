@@ -1,5 +1,4 @@
 name: Azure Static Web Apps CI/CD
-
 pr:
   branches:
     include:
@@ -13,8 +12,7 @@ jobs:
 - job: build_and_deploy_job
   displayName: Build and Deploy Job
   condition: or(eq(variables['Build.Reason'], 'Manual'),or(eq(variables['Build.Reason'], 'PullRequest'),eq(variables['Build.Reason'], 'IndividualCI')))
-  pool:
-    vmImage: ubuntu-latest
+  pool: default
   variables:
   - group: Azure-Static-Web-Apps-delightful-mud-01abc831e-variable-group
   steps:
