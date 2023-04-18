@@ -1,3 +1,24 @@
+*.aux 
+*.bit 
+*.blg 
+*.bbl 
+*.lof 
+*.log 
+*.lot 
+*.glo 
+*.glx 
+*.gxg 
+*.gxs 
+*.idx 
+*.ilg 
+*.ind 
+*.out 
+*.url 
+*.svn 
+*.toc
+*.pdf
+*.synctex.gz
+
 .pdf
 
 ## Ignore Visual Studio temporary files, build results, and
@@ -400,3 +421,7 @@ FodyWeavers.xsd
 *.sln.iml
 
 *.env
+Report/main.pdf
+Report/main.out
+Report/Figures/results.pdf
+Report/Figures/view.jpg

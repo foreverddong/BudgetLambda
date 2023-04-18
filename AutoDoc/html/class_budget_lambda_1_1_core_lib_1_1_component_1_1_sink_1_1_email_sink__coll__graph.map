@@ -1,0 +1,5 @@
+<map id="BudgetLambda.CoreLib.Component.Sink.EmailSink" name="BudgetLambda.CoreLib.Component.Sink.EmailSink">
+<area shape="rect" id="node1" title=" " alt="" coords="5,79,236,119"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_component_base.html" title="The abstract base type for all components in the project. This class declares various abstract and vi..." alt="" coords="7,5,125,31"/>
+<area shape="rect" id="node3" href="$interface_budget_lambda_1_1_core_lib_1_1_component_1_1_interfaces_1_1_i_sink.html" title="Represents the capibilities for a component to act as a Sink, consuming data at the end of a pipeline..." alt="" coords="150,5,201,31"/>
+</map>

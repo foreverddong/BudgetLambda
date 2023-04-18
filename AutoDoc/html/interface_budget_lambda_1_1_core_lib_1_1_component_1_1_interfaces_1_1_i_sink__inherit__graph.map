@@ -1,0 +1,5 @@
+<map id="BudgetLambda.CoreLib.Component.Interfaces.ISink" name="BudgetLambda.CoreLib.Component.Interfaces.ISink">
+<area shape="rect" id="node1" title="Represents the capibilities for a component to act as a Sink, consuming data at the end of a pipeline..." alt="" coords="5,37,236,77"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_sink_1_1_email_sink.html" title=" " alt="" coords="284,5,515,45"/>
+<area shape="rect" id="node3" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_sink_1_1_stdout_sink.html" title="Represents a sink component that simple prints all data it received into Stdout." alt="" coords="284,69,515,109"/>
+</map>

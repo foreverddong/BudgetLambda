@@ -1,0 +1,4 @@
+<map id="BudgetLambda.CoreLib.Component.PipelinePackage.PurgePipeline" name="BudgetLambda.CoreLib.Component.PipelinePackage.PurgePipeline">
+<area shape="rect" id="node1" title="Purges the pipeline, removing all deployed child components and essentially bring the whole package o..." alt="" coords="5,29,236,69"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_utility_1_1_faas_1_1_faas_client.html#a565a7cbb8f130d0319235b2ce9886f7e" title="Remove a deployed function." alt="" coords="284,29,549,69"/>
+</map>

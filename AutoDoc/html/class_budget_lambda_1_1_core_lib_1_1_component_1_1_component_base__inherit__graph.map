@@ -1,0 +1,8 @@
+<map id="BudgetLambda.CoreLib.Component.ComponentBase" name="BudgetLambda.CoreLib.Component.ComponentBase">
+<area shape="rect" id="node1" title="The abstract base type for all components in the project. This class declares various abstract and vi..." alt="" coords="5,133,236,173"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_map_1_1_c_sharp_lambda_map.html" title="The Lambda Map component in C# language." alt="" coords="284,5,515,45"/>
+<area shape="rect" id="node3" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_map_1_1_java_script_lambda_map.html" title=" " alt="" coords="284,69,515,109"/>
+<area shape="rect" id="node4" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_sink_1_1_email_sink.html" title=" " alt="" coords="284,133,515,173"/>
+<area shape="rect" id="node5" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_sink_1_1_stdout_sink.html" title="Represents a sink component that simple prints all data it received into Stdout." alt="" coords="284,197,515,237"/>
+<area shape="rect" id="node6" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_source_1_1_http_source.html" title="Represents a source that receives messages from an HTTP endpoint." alt="" coords="284,261,515,301"/>
+</map>

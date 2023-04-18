@@ -1,0 +1,4 @@
+<map id="BudgetLambda.CoreLib.Scheduler.BudgetWorkloadScheduler.ScheduleComponent" name="BudgetLambda.CoreLib.Scheduler.BudgetWorkloadScheduler.ScheduleComponent">
+<area shape="rect" id="node1" title="Schedules an individual component to run in the cluster. Dependent files will be scaffolded into the ..." alt="" coords="339,5,639,45"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_scheduler_1_1_budget_workload_scheduler.html#ac5cd9a75992ade8066bd98172dca51e3" title="Schedule a package for execution in the Faas platform. Child components for the package is recursivel..." alt="" coords="5,5,291,45"/>
+</map>

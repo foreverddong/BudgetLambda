@@ -1,0 +1,4 @@
+<map id="BudgetLambda.CoreLib.Component.ComponentBase.HealthCheck" name="BudgetLambda.CoreLib.Component.ComponentBase.HealthCheck">
+<area shape="rect" id="node1" title="Obtain the health status for this component, checking whether deployment exists in the Fass platform." alt="" coords="5,29,236,69"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_utility_1_1_faas_1_1_faas_client.html#a1d8647bf6129d290c8eb43583cdef9e7" title="Get a summary of an OpenFaaS function." alt="" coords="284,29,519,69"/>
+</map>

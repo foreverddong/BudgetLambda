@@ -1,0 +1,5 @@
+<map id="BudgetLambda.CoreLib.Component.ComponentBase.ConfigureKey" name="BudgetLambda.CoreLib.Component.ComponentBase.ConfigureKey">
+<area shape="rect" id="node1" title="Configures the input and output Routing Keys for the component, while also recursively configuring al..." alt="" coords="617,5,848,45"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_pipeline_package.html#a590c95776f1fb45fb63b65ce3331295f" title="Configures the package as well as its child components for their input and output keys." alt="" coords="339,5,569,45"/>
+<area shape="rect" id="node3" href="$class_budget_lambda_1_1_core_lib_1_1_scheduler_1_1_budget_workload_scheduler.html#ac5cd9a75992ade8066bd98172dca51e3" title="Schedule a package for execution in the Faas platform. Child components for the package is recursivel..." alt="" coords="5,5,291,45"/>
+</map>

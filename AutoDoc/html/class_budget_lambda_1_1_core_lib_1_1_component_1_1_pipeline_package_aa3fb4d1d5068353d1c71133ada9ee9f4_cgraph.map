@@ -1,0 +1,4 @@
+<map id="BudgetLambda.CoreLib.Component.PipelinePackage.CheckHealth" name="BudgetLambda.CoreLib.Component.PipelinePackage.CheckHealth">
+<area shape="rect" id="node1" title="Checks the health status of all child components." alt="" coords="5,5,236,45"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_component_base.html#ad9583b482ec9a99f8e830aaa0233b40d" title="Traversing the tree&#45;like structure to obtain child components." alt="" coords="284,5,523,45"/>
+</map>

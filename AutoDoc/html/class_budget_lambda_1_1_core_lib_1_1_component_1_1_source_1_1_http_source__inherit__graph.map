@@ -1,0 +1,5 @@
+<map id="BudgetLambda.CoreLib.Component.Source.HttpSource" name="BudgetLambda.CoreLib.Component.Source.HttpSource">
+<area shape="rect" id="node1" title="Represents a source that receives messages from an HTTP endpoint." alt="" coords="8,79,239,119"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_component_base.html" title="The abstract base type for all components in the project. This class declares various abstract and vi..." alt="" coords="5,5,124,31"/>
+<area shape="rect" id="node3" href="$interface_budget_lambda_1_1_core_lib_1_1_component_1_1_interfaces_1_1_i_source.html" title="Represents a source component in a pipeline with the capibility to receive data." alt="" coords="149,5,215,31"/>
+</map>
