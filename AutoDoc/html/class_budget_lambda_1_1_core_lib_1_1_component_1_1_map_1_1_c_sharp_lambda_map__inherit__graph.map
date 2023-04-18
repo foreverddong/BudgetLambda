@@ -1,0 +1,5 @@
+<map id="BudgetLambda.CoreLib.Component.Map.CSharpLambdaMap" name="BudgetLambda.CoreLib.Component.Map.CSharpLambdaMap">
+<area shape="rect" id="node1" title="The Lambda Map component in C# language." alt="" coords="15,79,245,119"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_component_base.html" title="The abstract base type for all components in the project. This class declares various abstract and vi..." alt="" coords="5,5,124,31"/>
+<area shape="rect" id="node3" href="$interface_budget_lambda_1_1_core_lib_1_1_component_1_1_interfaces_1_1_i_lambda_map.html" title="Denotes the capibility of representing a Lambda Map function component." alt="" coords="149,5,245,31"/>
+</map>

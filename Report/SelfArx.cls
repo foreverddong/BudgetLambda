@@ -230,18 +230,3 @@
 		\vskip18pt%
 	}]%
 }
-
-%----------------------------------------------------------------------------------------
-%	REFERENCES
-%----------------------------------------------------------------------------------------
-
-\renewcommand{\@biblabel}[1]{\bfseries\color{color1}\textsuperscript{[#1]}} % Styling of the reference numbers in the bibliography
-%\setlength{\bibitemsep}{0cm}
-
-\let\oldbibliography\thebibliography
-
-\renewcommand{\thebibliography}[1]{%
-	\addcontentsline{toc}{section}{\refname}%
-	\oldbibliography{#1}%
-	\setlength\itemsep{0pt}%
-}

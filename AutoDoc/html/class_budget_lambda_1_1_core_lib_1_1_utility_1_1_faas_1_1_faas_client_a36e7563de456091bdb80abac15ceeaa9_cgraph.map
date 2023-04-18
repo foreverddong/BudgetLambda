@@ -1,0 +1,3 @@
+<map id="BudgetLambda.CoreLib.Utility.Faas.FaasClient.SecretsGETAsync" name="BudgetLambda.CoreLib.Utility.Faas.FaasClient.SecretsGETAsync">
+<area shape="rect" id="node1" title="Get a list of secret names and metadata from the provider." alt="" coords="5,29,235,69"/>
+</map>

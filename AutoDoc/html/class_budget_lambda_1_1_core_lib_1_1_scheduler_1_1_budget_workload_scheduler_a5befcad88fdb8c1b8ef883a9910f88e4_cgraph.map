@@ -1,0 +1,5 @@
+<map id="BudgetLambda.CoreLib.Scheduler.BudgetWorkloadScheduler.ScheduleComponent" name="BudgetLambda.CoreLib.Scheduler.BudgetWorkloadScheduler.ScheduleComponent">
+<area shape="rect" id="node1" title="Schedules an individual component to run in the cluster. Dependent files will be scaffolded into the ..." alt="" coords="5,37,305,77"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_component_base.html#a8e0e8d2f4cf3b197c73be992aec79b23" title="Build and publish a docker image to the image registry." alt="" coords="385,5,615,45"/>
+<area shape="rect" id="node3" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_component_base.html#a9a39a7741715b951cd6ebde4728e20ac" title="Generates a deployment manifest that matches OpenFaas HTTP API, this manifest can then be sent agains..." alt="" coords="353,69,647,109"/>
+</map>

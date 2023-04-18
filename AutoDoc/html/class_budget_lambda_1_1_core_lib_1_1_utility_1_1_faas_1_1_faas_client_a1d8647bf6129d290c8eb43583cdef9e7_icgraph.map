@@ -1,0 +1,4 @@
+<map id="BudgetLambda.CoreLib.Utility.Faas.FaasClient.FunctionGETAsync" name="BudgetLambda.CoreLib.Utility.Faas.FaasClient.FunctionGETAsync">
+<area shape="rect" id="node1" title="Get a summary of an OpenFaaS function." alt="" coords="284,29,519,69"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_component_base.html#a53a0a37f522a5bb8dcf6630cd9fad3b6" title="Obtain the health status for this component, checking whether deployment exists in the Fass platform." alt="" coords="5,29,236,69"/>
+</map>

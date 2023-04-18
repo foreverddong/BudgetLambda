@@ -1,0 +1,5 @@
+<map id="BudgetLambda.CoreLib.Component.Interfaces.ILambdaMap" name="BudgetLambda.CoreLib.Component.Interfaces.ILambdaMap">
+<area shape="rect" id="node1" title="Denotes the capibility of representing a Lambda Map function component." alt="" coords="5,37,236,77"/>
+<area shape="rect" id="node2" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_map_1_1_c_sharp_lambda_map.html" title="The Lambda Map component in C# language." alt="" coords="284,5,515,45"/>
+<area shape="rect" id="node3" href="$class_budget_lambda_1_1_core_lib_1_1_component_1_1_map_1_1_java_script_lambda_map.html" title=" " alt="" coords="284,69,515,109"/>
+</map>
